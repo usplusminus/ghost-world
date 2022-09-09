@@ -76,22 +76,30 @@ export default class MainScene extends Phaser.Scene {
         this.physics.add.collider(this.stars, platforms);
         this.physics.add.overlap(this.player, this.stars, this.collectStar, undefined, this);
 
-        this.scoreText = this.add.text(16, 16, `score: ${this.score}`, { fontSize: '32px' });
+        this.scoreText = this.add.text(16, 16, `score: ${this.score}`, {fontSize: '32px'});
 
         this.bombs = this.physics.add.group();
 
         this.physics.add.collider(this.bombs, platforms);
 
-        this.physics.add.collider(this.player, this.bombs, this.hitBomb, null, this);
+        this.physics.add.collider(this.player, this.bombs, this.hitBomb, undefined, this);
     }
-    collectStar(_: Phaser.Types.Physics.Arcade.GameObjectWithBody, star: Phaser.Types.Physics.Arcade.GameObjectWithBody){
+
+    collectStar(_: Phaser.Types.Physics.Arcade.GameObjectWithBody, star: Phaser.Types.Physics.Arcade.GameObjectWithBody) {
         (star as Phaser.Physics.Arcade.Sprite).disableBody(true, true)
         this.score += 10
         this.scoreText.setText(`score ${this.score}`)
 
-        if (this.stars.countActive(true) === 0){
+        if (this.stars.countActive(true) === 0) {
             this.stars.children.iterate((child) => {
-                (child as Phaser.Physics.Arcade.Sprite).enableBody(true, child.x, 0, true, true)
+                (child as Phaser.Physics.Arcade.Sprite)
+                    .enableBody(
+                        true,
+                        (child as Phaser.Physics.Arcade.Sprite).x,
+                        0,
+                        true,
+                        true
+                    )
             })
             const x = (this.player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
             const bomb = this.bombs.create(x, 16, 'bomb');
@@ -100,10 +108,11 @@ export default class MainScene extends Phaser.Scene {
             bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
         }
     }
+
     hitBomb(
         player: Phaser.Types.Physics.Arcade.GameObjectWithBody,
         _bomb: Phaser.Types.Physics.Arcade.GameObjectWithBody
-    ){
+    ) {
         this.physics.pause();
         (player as Phaser.Physics.Arcade.Sprite).setTint(0xff0000);
         (player as Phaser.Physics.Arcade.Sprite).anims.play('turn');
@@ -112,7 +121,7 @@ export default class MainScene extends Phaser.Scene {
 
     update(_time: number, _delta: number) {
         if (this.gameOver) {
-            this.add.text(50, 50, `GAME OVER`, { fontSize: '64px' });
+            this.add.text(50, 50, `GAME OVER`, {fontSize: '64px'});
             this.scoreText.destroy()
             this.scene.pause()
             return

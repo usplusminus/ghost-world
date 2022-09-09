@@ -2,9 +2,13 @@ import Phaser from 'phaser';
 
 export default class MainScene extends Phaser.Scene {
     private player: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
+    private score: number;
+    private scoreText: Phaser.GameObjects.Text;
+
 
     constructor() {
         super('MainScene');
+        this.score = 0
     }
 
     preload() {
@@ -66,7 +70,10 @@ export default class MainScene extends Phaser.Scene {
 
         this.physics.add.collider(this.player, platforms)
         this.physics.add.collider(stars, platforms);
-        this.physics.add.overlap(this.player, stars, collectStar, undefined, this);
+        this.physics.add.overlap(this.player, stars, this.collectStar, undefined, this);
+
+        this.scoreText = this.add.text(16, 16, `score: ${this.score}`, { fontSize: '32px' });
+        
     }
 
     update(_time: number, _delta: number) {
@@ -92,7 +99,9 @@ export default class MainScene extends Phaser.Scene {
             this.player.setVelocityY(0)
         }
     }
-
+    collectStar(_: Phaser.Types.Physics.Arcade.GameObjectWithBody, star: Phaser.Types.Physics.Arcade.GameObjectWithBody){
+        (star as Phaser.Physics.Arcade.Sprite).disableBody(true, true)
+        this.score += 10
+        this.scoreText.setText(`score ${this.score}`)
+    }
 }
-const collectStar = (_: Phaser.Types.Physics.Arcade.GameObjectWithBody, star: Phaser.Types.Physics.Arcade.GameObjectWithBody) =>
-    (star as Phaser.Physics.Arcade.Sprite).disableBody(true, true)

@@ -111,6 +111,13 @@ export default class MainScene extends Phaser.Scene {
     }
 
     update(_time: number, _delta: number) {
+        if (this.gameOver) {
+            this.add.text(50, 50, `GAME OVER`, { fontSize: '64px' });
+            this.scoreText.destroy()
+            this.scene.pause()
+            return
+        }
+
         const cursors = this.input.keyboard.createCursorKeys();
         const speed = 160
 

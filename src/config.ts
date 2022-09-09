@@ -10,6 +10,16 @@ export const gameConfig = (parentElement: HTMLElement): Phaser.Types.Core.GameCo
             height: 600,
             mode: Phaser.Scale.FIT,
             autoCenter: Phaser.Scale.CENTER_BOTH
+        },
+        physics: {
+            default: "arcade",
+            arcade: {
+                gravity: { y: 30 },
+                debug: false
+            }
+        },
+        audio: {
+            noAudio: true
         }
     }
 }

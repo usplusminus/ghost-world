@@ -1,7 +1,10 @@
 import './style.css'
+import {setupGame} from "./game";
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <h1>usplusminus</h1>
-  </div>
-`
+const appRoot = document.querySelector<HTMLDivElement>('#app')!
+const header = document.createElement("h1")
+header.innerText = `usplusminus`
+const gameContainer = document.createElement("div")
+appRoot.appendChild(header)
+appRoot.appendChild(gameContainer)
+setupGame(gameContainer)

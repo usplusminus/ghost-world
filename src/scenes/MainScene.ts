@@ -7,7 +7,6 @@ export default class MainScene extends Phaser.Scene {
     private bombs: Phaser.Physics.Arcade.Group;
     private gameOver: boolean;
     private stars: Phaser.Physics.Arcade.Group;
-    private background: Phaser.GameObjects.TileSprite;
 
 
     constructor() {
@@ -17,7 +16,6 @@ export default class MainScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('sky', 'assets/sky.png');
         this.load.image('ground', 'assets/platform.png');
         this.load.image('star', 'assets/star.png');
         this.load.image('bomb', 'assets/bomb.png');
@@ -28,7 +26,6 @@ export default class MainScene extends Phaser.Scene {
     }
 
     create() {
-        const {width: canvasWidth, height: canvasHeight} = this.sys.game.canvas;
         this.cameras.main.setZoom(0.5);
         this.cameras.main.centerOn(0, 0);
 
@@ -124,7 +121,6 @@ export default class MainScene extends Phaser.Scene {
     }
 
     update(_time: number, _delta: number) {
-        this.background.tilePositionY -= 0.5
 
         if (this.gameOver) {
             this.add.text(50, 50, `GAME OVER`, {fontSize: '64px'});

@@ -4,6 +4,7 @@ export default class MainScene extends Phaser.Scene {
     private player: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
     private score: number;
     private scoreText: Phaser.GameObjects.Text;
+    private debugText: Phaser.GameObjects.Text;
     private bombs: Phaser.Physics.Arcade.Group;
     private gameOver: boolean;
     private stars: Phaser.Physics.Arcade.Group;
@@ -78,6 +79,7 @@ export default class MainScene extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.stars, this.collectStar, undefined, this);
 
         this.scoreText = this.add.text(16, 16, `score: ${this.score}`, {fontSize: '32px'});
+        this.debugText = this.add.text(16, 16, "", {fontSize: '32px'});
 
         this.bombs = this.physics.add.group();
 
@@ -121,6 +123,9 @@ export default class MainScene extends Phaser.Scene {
     }
 
     update(_time: number, _delta: number) {
+
+        this.debugText.setText(`x ${this.player.x.toFixed(0)} y ${this.player.y.toFixed(0)}`)
+        this.debugText.setPosition(this.player.x, this.player.y - 50)
 
         if (this.gameOver) {
             this.add.text(50, 50, `GAME OVER`, {fontSize: '64px'});

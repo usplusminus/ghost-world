@@ -29,7 +29,8 @@ export default class MainScene extends Phaser.Scene {
 
     create() {
         const {width: canvasWidth, height: canvasHeight} = this.sys.game.canvas;
-        this.background = this.add.tileSprite(canvasWidth / 2, canvasHeight / 2, canvasWidth, canvasHeight, 'sky')
+        this.cameras.main.setZoom(0.5);
+        this.cameras.main.centerOn(0, 0);
 
         const platforms = this.physics.add.staticGroup()
         platforms.create(400, 568, 'ground').setScale(2).refreshBody();
@@ -41,7 +42,9 @@ export default class MainScene extends Phaser.Scene {
         this.player = this.physics.add.sprite(100, 450, 'dude');
 
         this.player.setBounce(0.2);
-        this.player.setCollideWorldBounds(true);
+        // this.player.setCollideWorldBounds(true);
+
+        this.cameras.main.startFollow(this.player, true, 0.09, 0.09);
 
         this.anims.create({
             key: "left",

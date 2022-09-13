@@ -7,6 +7,7 @@ export default class MainScene extends Phaser.Scene {
     private bombs: Phaser.Physics.Arcade.Group;
     private gameOver: boolean;
     private stars: Phaser.Physics.Arcade.Group;
+    private background: Phaser.GameObjects.TileSprite;
 
 
     constructor() {
@@ -28,7 +29,7 @@ export default class MainScene extends Phaser.Scene {
 
     create() {
         const {width: canvasWidth, height: canvasHeight} = this.sys.game.canvas;
-        this.add.image(canvasWidth / 2, canvasHeight / 2, 'sky')
+        this.background = this.add.tileSprite(canvasWidth / 2, canvasHeight / 2, canvasWidth, canvasHeight, 'sky')
 
         const platforms = this.physics.add.staticGroup()
         platforms.create(400, 568, 'ground').setScale(2).refreshBody();
@@ -120,6 +121,8 @@ export default class MainScene extends Phaser.Scene {
     }
 
     update(_time: number, _delta: number) {
+        this.background.tilePositionY -= 0.5
+
         if (this.gameOver) {
             this.add.text(50, 50, `GAME OVER`, {fontSize: '64px'});
             this.scoreText.destroy()

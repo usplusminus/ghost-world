@@ -135,7 +135,7 @@ export default class MainScene extends Phaser.Scene {
         }
 
         const cursors = this.input.keyboard.createCursorKeys();
-        const speed = 160
+        const speed = 320
 
         if (cursors.left.isDown) {
             this.player.setVelocityX(-speed);

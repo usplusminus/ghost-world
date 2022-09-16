@@ -38,7 +38,7 @@ export default class MainScene extends Phaser.Scene {
         platforms.create(50, 250, assets.ground.key);
         platforms.create(750, 220, assets.ground.key);
 
-        this.terrain = this.add.image(0, 0, assets.terrain.key).setScale(3).setAlpha(alpha, alpha, alpha, alpha)
+        this.terrain = this.add.image(0, 0, assets.terrain.key).setScale(3)
 
         this.player = this.physics.add.sprite(100, 450, assets.dude.key);
 
@@ -126,6 +126,19 @@ export default class MainScene extends Phaser.Scene {
     }
 
     update(_time: number, _delta: number) {
+        const distanceBetweenPlayerAndTerrain = Phaser.Math.Distance.BetweenPoints(this.terrain.getCenter(), this.player.getCenter())
+        const thresholdDistance = 500
+        const distanceRatio = distanceBetweenPlayerAndTerrain / thresholdDistance
+        if (distanceBetweenPlayerAndTerrain < thresholdDistance) {
+            const alpha = Math.max(distanceRatio, 0.1)
+            this.terrain.setAlpha(alpha, alpha, alpha, alpha)
+            const scale = Math.max(distanceRatio, 0.5)
+            this.terrain.setScale(scale)
+        } else {
+            this.terrain.setAlpha(1)
+            this.terrain.setScale(Math.min(distanceRatio, 3))
+        }
+
         this.debugText.setText(`x ${this.player.x.toFixed(0)} y ${this.player.y.toFixed(0)}`)
         this.debugText.setPosition(this.player.x, this.player.y - 50)
 

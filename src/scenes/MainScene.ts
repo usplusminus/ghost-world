@@ -10,6 +10,7 @@ export default class MainScene extends Phaser.Scene {
     private gameOver: boolean;
     private stars: Phaser.Physics.Arcade.Group;
     private terrain: Phaser.GameObjects.Image;
+    private terrainOutline: Phaser.GameObjects.Rectangle;
 
 
     constructor() {
@@ -39,6 +40,14 @@ export default class MainScene extends Phaser.Scene {
         platforms.create(750, 220, assets.ground.key);
 
         this.terrain = this.add.image(0, 0, assets.terrain.key).setScale(3)
+        this.terrainOutline = this.add.rectangle(
+            this.terrain.x,
+            this.terrain.y,
+            this.terrain.width,
+            this.terrain.height,
+        )
+        this.terrainOutline.setStrokeStyle(1, 0x000, 1.0)
+        this.terrainOutline.setVisible(false)
 
         this.player = this.physics.add.sprite(100, 450, assets.dude.key);
 
@@ -87,7 +96,6 @@ export default class MainScene extends Phaser.Scene {
         this.bombs = this.physics.add.group();
 
         this.physics.add.collider(this.bombs, platforms);
-
         this.physics.add.collider(this.player, this.bombs, this.hitBomb, undefined, this);
     }
 
@@ -127,16 +135,19 @@ export default class MainScene extends Phaser.Scene {
 
     update(_time: number, _delta: number) {
         const distanceBetweenPlayerAndTerrain = Phaser.Math.Distance.BetweenPoints(this.terrain.getCenter(), this.player.getCenter())
-        const thresholdDistance = 500
-        const distanceRatio = distanceBetweenPlayerAndTerrain / thresholdDistance
-        if (distanceBetweenPlayerAndTerrain < thresholdDistance) {
+        const thresholdForInteractionDistance = 200
+        const distanceRatio = distanceBetweenPlayerAndTerrain / thresholdForInteractionDistance
+        if (distanceBetweenPlayerAndTerrain < thresholdForInteractionDistance) {
             const alpha = Math.max(distanceRatio, 0.1)
             this.terrain.setAlpha(alpha, alpha, alpha, alpha)
             const scale = Math.max(distanceRatio, 0.5)
             this.terrain.setScale(scale)
+            this.terrainOutline.setVisible(true)
+            this.terrainOutline.lineWidth = 5.0 / scale
         } else {
             this.terrain.setAlpha(1)
             this.terrain.setScale(Math.min(distanceRatio, 3))
+            this.terrainOutline.setVisible(false)
         }
 
         this.debugText.setText(`x ${this.player.x.toFixed(0)} y ${this.player.y.toFixed(0)}`)

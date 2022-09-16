@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import assets from "../assets";
 
 export default class MainScene extends Phaser.Scene {
     private player: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
@@ -8,6 +9,7 @@ export default class MainScene extends Phaser.Scene {
     private bombs: Phaser.Physics.Arcade.Group;
     private gameOver: boolean;
     private stars: Phaser.Physics.Arcade.Group;
+    private terrain: Phaser.GameObjects.Image;
 
 
     constructor() {
@@ -17,11 +19,11 @@ export default class MainScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('ground', 'assets/platform.png');
-        this.load.image('star', 'assets/star.png');
-        this.load.image('bomb', 'assets/bomb.png');
-        this.load.spritesheet('dude',
-            'assets/dude.png',
+        this.load.svg(assets.terrain.key, assets.terrain.filepath);
+        this.load.image(assets.ground.key, assets.ground.filepath);
+        this.load.image(assets.star.key, assets.star.filepath);
+        this.load.image(assets.bomb.key, assets.bomb.filepath);
+        this.load.spritesheet(assets.dude.key, assets.dude.filepath,
             {frameWidth: 32, frameHeight: 48}
         );
     }
@@ -31,13 +33,14 @@ export default class MainScene extends Phaser.Scene {
         this.cameras.main.centerOn(0, 0);
 
         const platforms = this.physics.add.staticGroup()
-        platforms.create(400, 568, 'ground').setScale(2).refreshBody();
-        platforms.create(600, 400, 'ground');
-        platforms.create(50, 250, 'ground');
-        platforms.create(750, 220, 'ground');
+        platforms.create(400, 568, assets.ground.key).setScale(2).refreshBody();
+        platforms.create(600, 400, assets.ground.key);
+        platforms.create(50, 250, assets.ground.key);
+        platforms.create(750, 220, assets.ground.key);
 
+        this.terrain = this.add.image(0, 0, assets.terrain.key).setScale(3).setAlpha(alpha, alpha, alpha, alpha)
 
-        this.player = this.physics.add.sprite(100, 450, 'dude');
+        this.player = this.physics.add.sprite(100, 450, assets.dude.key);
 
         this.player.setBounce(0.2);
         // this.player.setCollideWorldBounds(true);
@@ -46,26 +49,26 @@ export default class MainScene extends Phaser.Scene {
 
         this.anims.create({
             key: "left",
-            frames: this.anims.generateFrameNumbers('dude', {start: 0, end: 3}),
+            frames: this.anims.generateFrameNumbers(assets.dude.key, {start: 0, end: 3}),
             frameRate: 10,
             repeat: -1
         });
 
         this.anims.create({
             key: 'turn',
-            frames: [{key: 'dude', frame: 4}],
+            frames: [{key: assets.dude.key, frame: 4}],
             frameRate: 20
         });
 
         this.anims.create({
             key: 'right',
-            frames: this.anims.generateFrameNumbers('dude', {start: 5, end: 8}),
+            frames: this.anims.generateFrameNumbers(assets.dude.key, {start: 5, end: 8}),
             frameRate: 10,
             repeat: -1
         });
 
         this.stars = this.physics.add.group({
-            key: 'star',
+            key: assets.star.key,
             repeat: 11,
             setXY: {x: 12, y: 0, stepX: 70}
         });
@@ -105,7 +108,7 @@ export default class MainScene extends Phaser.Scene {
                     )
             })
             const x = (this.player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
-            const bomb = this.bombs.create(x, 16, 'bomb');
+            const bomb = this.bombs.create(x, 16, assets.bomb.key);
             bomb.setBounce(1);
             bomb.setCollideWorldBounds(true);
             bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
@@ -123,7 +126,6 @@ export default class MainScene extends Phaser.Scene {
     }
 
     update(_time: number, _delta: number) {
-
         this.debugText.setText(`x ${this.player.x.toFixed(0)} y ${this.player.y.toFixed(0)}`)
         this.debugText.setPosition(this.player.x, this.player.y - 50)
 

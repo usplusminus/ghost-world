@@ -11,6 +11,7 @@ export default class MainScene extends Phaser.Scene {
     private stars: Phaser.Physics.Arcade.Group;
     private terrain: Phaser.GameObjects.Image;
     private terrainOutline: Phaser.GameObjects.Rectangle;
+    private notificationSound: Phaser.Sound.BaseSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound;
 
 
     constructor() {
@@ -27,6 +28,7 @@ export default class MainScene extends Phaser.Scene {
         this.load.spritesheet(assets.dude.key, assets.dude.filepath,
             {frameWidth: 32, frameHeight: 48}
         );
+        this.load.audio(assets.sounds.notification.key, assets.sounds.notification.filepath);
     }
 
     create() {
@@ -38,6 +40,8 @@ export default class MainScene extends Phaser.Scene {
         platforms.create(600, 400, assets.ground.key);
         platforms.create(50, 250, assets.ground.key);
         platforms.create(750, 220, assets.ground.key);
+
+        this.notificationSound = this.sound.add(assets.sounds.notification.key)
 
         this.terrain = this.add.image(0, 0, assets.terrain.key).setScale(3)
         this.terrainOutline = this.add.rectangle(
@@ -103,6 +107,7 @@ export default class MainScene extends Phaser.Scene {
         (star as Phaser.Physics.Arcade.Sprite).disableBody(true, true)
         this.score += 10
         this.scoreText.setText(`score ${this.score}`)
+        this.notificationSound.play()
 
         if (this.stars.countActive(true) === 0) {
             this.stars.children.iterate((child) => {

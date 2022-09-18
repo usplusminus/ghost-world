@@ -19,4 +19,10 @@ export default {
         key: 'dude',
         filepath:      'assets/dude.png'
     },
+    sounds : {
+        notification : {
+            key: "notification",
+            filepath: "assets/sounds/400697__daphne-in-wonderland__messenger-notification-sound-imitation.mp3"
+        }
+    }
 }

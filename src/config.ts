@@ -17,9 +17,6 @@ export const gameConfig = (parentElement: HTMLElement): Phaser.Types.Core.GameCo
                 gravity: { y: 30 },
                 debug: false
             }
-        },
-        audio: {
-            noAudio: true
         }
     }
 }

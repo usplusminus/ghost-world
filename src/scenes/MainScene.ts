@@ -14,7 +14,6 @@ export default class MainScene extends Phaser.Scene {
     private terrainOutline: Phaser.GameObjects.Rectangle;
     private notificationSound: Phaser.Sound.BaseSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound;
 
-
     constructor() {
         super('MainScene');
         this.score = 0
@@ -99,12 +98,29 @@ export default class MainScene extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.stars, this.collectStar, undefined, this);
 
         this.scoreText = this.add.text(16, 16, `score: ${this.score}`, {fontSize: '32px', color: colors.black});
-        this.debugText = this.add.text(16, 16, "", {fontSize: '32px', color : colors.black});
+        this.debugText = this.add.text(16, 16, "", {fontSize: '32px', color: colors.black});
 
         this.bombs = this.physics.add.group();
 
         this.physics.add.collider(this.bombs, platforms);
         this.physics.add.collider(this.player, this.bombs, this.hitBomb, undefined, this);
+
+        const points = [
+            20, 550,
+            260, 450,
+            300, 250,
+            550, 145,
+            745, 256
+        ].map(v => v * 3)
+        const path = new Phaser.Curves.Spline(points)
+        // const graphics = this.add.graphics();
+        // graphics.lineStyle(1, 0x000000, 1);
+        // path.draw(graphics, 128);
+
+        const storyText = "What if you could trace the lineage of ideas from person to person throughout history"
+        path.getSpacedPoints(storyText.length).map((point, idx) =>
+            this.add.text(point.x, point.y, storyText.at(idx) ?? "", {fontSize: '32px', color: colors.black})
+        )
     }
 
     collectStar(_: Phaser.Types.Physics.Arcade.GameObjectWithBody, star: Phaser.Types.Physics.Arcade.GameObjectWithBody) {

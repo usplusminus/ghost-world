@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import assets from "../assets";
+import {colors} from "./colors";
 
 export default class MainScene extends Phaser.Scene {
     private player: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
@@ -46,7 +47,7 @@ export default class MainScene extends Phaser.Scene {
 
         this.notificationSound = this.sound.add(assets.sounds.notification.key)
 
-        this.terrain = this.add.image(0, -500, assets.terrain.key).setScale(3)
+        this.terrain = this.add.image(0, -300, assets.terrain.key).setScale(3)
         this.terrainOutline = this.add.rectangle(
             this.terrain.x,
             this.terrain.y,
@@ -97,8 +98,8 @@ export default class MainScene extends Phaser.Scene {
         this.physics.add.collider(this.stars, platforms);
         this.physics.add.overlap(this.player, this.stars, this.collectStar, undefined, this);
 
-        this.scoreText = this.add.text(16, 16, `score: ${this.score}`, {fontSize: '32px'});
-        this.debugText = this.add.text(16, 16, "", {fontSize: '32px'});
+        this.scoreText = this.add.text(16, 16, `score: ${this.score}`, {fontSize: '32px', color: colors.black});
+        this.debugText = this.add.text(16, 16, "", {fontSize: '32px', color : colors.black});
 
         this.bombs = this.physics.add.group();
 
@@ -158,11 +159,11 @@ export default class MainScene extends Phaser.Scene {
             this.terrainOutline.setVisible(false)
         }
 
-        this.debugText.setText(`x ${this.player.x.toFixed(0)} y ${this.player.y.toFixed(0)}`)
+        this.debugText.setText(`(${this.player.x.toFixed(0)}, ${this.player.y.toFixed(0)})`)
         this.debugText.setPosition(this.player.x, this.player.y - 50)
 
         if (this.gameOver) {
-            this.add.text(50, 50, `GAME OVER`, {fontSize: '64px'});
+            this.add.text(50, 50, `GAME OVER`, {fontSize: '64px', color: colors.black});
             this.scoreText.destroy()
             this.scene.pause()
             return

@@ -4,7 +4,7 @@ export const gameConfig = (parentElement: HTMLElement): Phaser.Types.Core.GameCo
     return {
         type: Phaser.AUTO,
         parent: parentElement,
-        backgroundColor: '#33A5E7',
+        backgroundColor: '#FFF',
         scale: {
             width: 800,
             height: 600,

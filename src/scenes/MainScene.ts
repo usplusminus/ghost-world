@@ -22,7 +22,10 @@ export default class MainScene extends Phaser.Scene {
 
     preload() {
         this.load.svg(assets.terrain.key, assets.terrain.filepath);
-        this.load.image(assets.ground.key, assets.ground.filepath);
+        this.load.image(assets.platforms.platform1.key, assets.platforms.platform1.filepath);
+        this.load.image(assets.platforms.platform2.key, assets.platforms.platform2.filepath);
+        this.load.image(assets.platforms.platform3.key, assets.platforms.platform3.filepath);
+        this.load.image(assets.platforms.platform4.key, assets.platforms.platform4.filepath);
         this.load.image(assets.star.key, assets.star.filepath);
         this.load.image(assets.bomb.key, assets.bomb.filepath);
         this.load.spritesheet(assets.dude.key, assets.dude.filepath,
@@ -36,14 +39,14 @@ export default class MainScene extends Phaser.Scene {
         this.cameras.main.centerOn(0, 0);
 
         const platforms = this.physics.add.staticGroup()
-        platforms.create(400, 568, assets.ground.key).setScale(2).refreshBody();
-        platforms.create(600, 400, assets.ground.key);
-        platforms.create(50, 250, assets.ground.key);
-        platforms.create(750, 220, assets.ground.key);
+        platforms.create(400, 568, assets.platforms.platform1.key).setScale(2).refreshBody();
+        platforms.create(600, 400, assets.platforms.platform2.key).setScale(2).refreshBody();
+        platforms.create(50, 250, assets.platforms.platform3.key).setScale(2).refreshBody();
+        platforms.create(750, 220, assets.platforms.platform4.key).setScale(2).refreshBody();
 
         this.notificationSound = this.sound.add(assets.sounds.notification.key)
 
-        this.terrain = this.add.image(0, 0, assets.terrain.key).setScale(3)
+        this.terrain = this.add.image(0, -500, assets.terrain.key).setScale(3)
         this.terrainOutline = this.add.rectangle(
             this.terrain.x,
             this.terrain.y,

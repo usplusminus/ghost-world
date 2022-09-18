@@ -3,9 +3,24 @@ export default {
         key: "terrain",
         filepath: "assets/terrain.svg"
     },
-    ground: {
-        key: 'ground',
-        filepath: 'assets/platform.png'
+    platforms: {
+        platform1 : {
+            key: 'platform1',
+            filepath: 'assets/platforms/platform1.png'
+        },
+        platform2 : {
+            key: 'platform2',
+            filepath: 'assets/platforms/platform2.png'
+        },
+        platform3 : {
+            key: 'platform3',
+            filepath: 'assets/platforms/platform3.png'
+        },
+        platform4 : {
+            key: 'platform4',
+            filepath: 'assets/platforms/platform4.png'
+        },
+
     },
     star: {
         key: 'star',

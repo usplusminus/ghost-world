@@ -8,5 +8,7 @@ body {
 }
 
 canvas {
+  margin: 0;
   border: 1px solid black;
+  overflow: hidden;
 }

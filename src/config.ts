@@ -1,9 +1,9 @@
 import Phaser from "phaser";
 
-export const gameConfig = (parentElement: HTMLElement): Phaser.Types.Core.GameConfig => {
+export const gameConfig = (canvasElement: HTMLCanvasElement): Phaser.Types.Core.GameConfig => {
     return {
-        type: Phaser.AUTO,
-        parent: parentElement,
+        type: Phaser.CANVAS,
+        canvas: canvasElement,
         backgroundColor: '#FFF',
         scale: {
             width: 800,

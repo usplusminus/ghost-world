@@ -2,9 +2,9 @@ import Phaser from "phaser";
 import MainScene from "./scenes/MainScene";
 import {gameConfig} from "./config";
 
-export const setupGame = (parentElement : HTMLElement): Phaser.Game => {
+export const setupGame = (canvasElement: HTMLCanvasElement): Phaser.Game => {
     return new Phaser.Game(
-        Object.assign(gameConfig(parentElement), {
+        Object.assign(gameConfig(canvasElement), {
             scene: [MainScene]
         })
     );

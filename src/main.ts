@@ -8,10 +8,11 @@ header.innerText = `usplusminus`
 appRoot.appendChild(header)
 
 const gameContainer = document.createElement("div")
+const canvasElement = document.createElement("canvas")
+gameContainer.appendChild(canvasElement)
 appRoot.appendChild(gameContainer)
-setupGame(gameContainer)
+setupGame(canvasElement)
 
 // import {startSpiders} from "./spider";
-// const canvas = document.createElement("canvas")
 // appRoot.appendChild(canvas)
 // startSpiders(canvas)

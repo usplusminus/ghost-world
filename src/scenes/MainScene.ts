@@ -37,18 +37,13 @@ export default class MainScene extends Phaser.Scene {
             745, 256
         ].map(v => v * 3)
         const path = new Phaser.Curves.Spline(points)
-        // const graphics = this.add.graphics();
-        // graphics.lineStyle(1, 0x000000, 1);
-        // path.draw(graphics, 128);
-
         const storyText = "What if you could trace the lineage of ideas from person to person throughout history"
-
         this.textPath = path
             .getSpacedPoints(storyText.length)
             .map((point, idx, allSpacedPoints) => {
                 const rotation = idx === 0 ? 0 : point.cross(allSpacedPoints[idx - 1])
                 return this.add.text(point.x, point.y, storyText.at(idx) ?? "",
-                    {fontSize: '32px', color: semanticColors.primary}
+                    {fontSize: '32px', color: semanticColors.primary, fontFamily: "Times New Roman"}
                 ).setRotation(rotation)
             }
             )

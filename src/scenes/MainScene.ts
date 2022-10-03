@@ -42,10 +42,12 @@ export default class MainScene extends Phaser.Scene {
 
         const storyText = "What if you could trace the lineage of ideas from person to person throughout history"
         path.getSpacedPoints(storyText.length)
-            .map((point, idx) =>
+            .map((point, idx, allSpacedPoints) => {
+                const rotation = idx === 0 ? 0 : point.cross(allSpacedPoints[idx - 1])
                 this.add.text(point.x, point.y, storyText.at(idx) ?? "",
                     {fontSize: '32px', color: semanticColors.primary}
-                )
+                ).setRotation(rotation)
+            }
             )
     }
 

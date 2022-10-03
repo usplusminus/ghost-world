@@ -7,6 +7,7 @@ import {semanticColors} from "./colors";
 export default class MainScene extends Phaser.Scene {
     private player: Player;
     private spider: Spider;
+    private textPath: Phaser.GameObjects.Text[];
 
     constructor() {
         super('MainScene');
@@ -41,10 +42,12 @@ export default class MainScene extends Phaser.Scene {
         // path.draw(graphics, 128);
 
         const storyText = "What if you could trace the lineage of ideas from person to person throughout history"
-        path.getSpacedPoints(storyText.length)
+
+        this.textPath = path
+            .getSpacedPoints(storyText.length)
             .map((point, idx, allSpacedPoints) => {
                 const rotation = idx === 0 ? 0 : point.cross(allSpacedPoints[idx - 1])
-                this.add.text(point.x, point.y, storyText.at(idx) ?? "",
+                return this.add.text(point.x, point.y, storyText.at(idx) ?? "",
                     {fontSize: '32px', color: semanticColors.primary}
                 ).setRotation(rotation)
             }
@@ -54,5 +57,6 @@ export default class MainScene extends Phaser.Scene {
     update(_time: number, _delta: number) {
         this.player.update(_time, _delta)
         this.spider.update(_time, _delta)
+        this.textPath.forEach(ch => ch.setRotation(ch.rotation + (Math.random() > 0.5 ? .01 : -.01)))
     }
 }

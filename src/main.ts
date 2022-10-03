@@ -14,5 +14,4 @@ appRoot.appendChild(gameContainer)
 setupGame(canvasElement)
 
 // import {startSpiders} from "./spider";
-// appRoot.appendChild(canvas)
-// startSpiders(canvas)
+// startSpiders(canvasElement)

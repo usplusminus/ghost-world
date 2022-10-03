@@ -107,18 +107,11 @@ function spawn() {
     }
 }
 
-function recalc(X, Y) {
-    tx = X;
-    ty = Y;
-}
-
 function rnd(x = 1, dx = 0) {
     return Math.random() * x + dx;
 }
 
-function drawCircle(x, y, r, color) {
-    //console.log(x,y,r)
-    // ctx.fillStyle = color;
+function drawCircle(x, y, r) {
     ctx.beginPath();
     ctx.ellipse(x, y, r, r, 0, 0, PI * 2);
     ctx.fill();

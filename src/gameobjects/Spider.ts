@@ -19,12 +19,14 @@ export class Spider extends Phaser.GameObjects.Graphics {
     private ky: number;
     private walkRadius: Point;
     private r: number;
-    private graphics: Phaser.GameObjects.Graphics;
+    private pointGraphics: Phaser.GameObjects.Graphics;
+    private lineGraphics: Phaser.GameObjects.Graphics;
 
     constructor(scene: Phaser.Scene) {
         super(scene);
 
-        this.graphics = this.scene.add.graphics({lineStyle: {width: 3, color: hexColors.black, alpha: 0.6}})
+        this.pointGraphics = this.scene.add.graphics({lineStyle: {width: 3.0, color: hexColors.black, alpha: 1.0}})
+        this.lineGraphics = this.scene.add.graphics({lineStyle: {width: 0.5, color: hexColors.black, alpha: 1.0}})
 
         this.points = many(100, () => {
             return {
@@ -42,11 +44,12 @@ export class Spider extends Phaser.GameObjects.Graphics {
             };
         });
 
+
         this.seed = randomInRange(100)
-        this.tx = randomInRange(innerWidth);
-        this.ty = randomInRange(innerHeight);
-        this.x = randomInRange(innerWidth)
-        this.y = randomInRange(innerHeight)
+        this.tx = randomInRange(innerWidth / 4);
+        this.ty = randomInRange(innerHeight / 4);
+        this.x = 0
+        this.y = 0
         this.kx = randomInRange(0.5, 0.5)
         this.ky = randomInRange(0.5, 0.5)
         this.walkRadius = point(randomInRange(50, 50), randomInRange(50, 50))
@@ -54,8 +57,9 @@ export class Spider extends Phaser.GameObjects.Graphics {
     }
 
     override update(_time: number, _delta: number) {
-        this.graphics.clear()
-        this.tick(_time / 100)
+        this.pointGraphics.clear()
+        this.lineGraphics.clear()
+        this.tick(_time / 1000)
     }
 
     paintPoint(point: Point) {
@@ -100,20 +104,23 @@ export class Spider extends Phaser.GameObjects.Graphics {
 
 
     drawCircle(x: number, y: number, r: number) {
-        this.graphics.fillCircle(x, y, r)
+        this.pointGraphics.fillCircle(x, y, r)
+
     }
 
     drawLine(x0: number, y0: number, x1: number, y1: number) {
-        const path = new Phaser.Curves.Path(x0, y0);
+        this.lineGraphics.beginPath()
+        this.lineGraphics.moveTo(x0, y0)
         const n = 100;
         many(n, (i) => {
             i = (i + 1) / n;
             const x = lerp(x0, x1, i);
             const y = lerp(y0, y1, i);
             const k = noise(x / 5 + x0, y / 5 + y0) * 2;
-            path.lineTo(x + k, y + k);
+            this.lineGraphics.lineTo(x + k, y + k);
         });
-        path.draw(this.graphics)
+        this.lineGraphics.closePath()
+        this.lineGraphics.stroke()
     }
 }
 

@@ -1,9 +1,10 @@
 import Phaser from 'phaser';
 import assets from "../assets";
 import {colors} from "./colors";
+import {Player} from "../gameobjects/Player";
 
 export default class MainScene extends Phaser.Scene {
-    private player: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
+    private player: Player;
     private score: number;
     private scoreText: Phaser.GameObjects.Text;
     private debugText: Phaser.GameObjects.Text;
@@ -56,10 +57,7 @@ export default class MainScene extends Phaser.Scene {
         this.terrainOutline.setStrokeStyle(1, 0x000, 1.0)
         this.terrainOutline.setVisible(false)
 
-        this.player = this.physics.add.sprite(100, 450, assets.dude.key);
-
-        this.player.setBounce(0.2);
-        // this.player.setCollideWorldBounds(true);
+        this.player = new Player(this)
 
         this.cameras.main.startFollow(this.player, true, 0.09, 0.09);
 
@@ -93,9 +91,9 @@ export default class MainScene extends Phaser.Scene {
             (child as Phaser.Physics.Arcade.Sprite).setBounceY(Phaser.Math.FloatBetween(0.4, 0.8))
         );
 
-        this.physics.add.collider(this.player, platforms)
+        this.physics.add.collider(this.player.sprite, platforms)
         this.physics.add.collider(this.stars, platforms);
-        this.physics.add.overlap(this.player, this.stars, this.collectStar, undefined, this);
+        this.physics.add.overlap(this.player.sprite, this.stars, this.collectStar, undefined, this);
 
         this.scoreText = this.add.text(16, 16, `score: ${this.score}`, {fontSize: '32px', color: colors.black});
         this.debugText = this.add.text(16, 16, "", {fontSize: '32px', color: colors.black});
@@ -103,7 +101,7 @@ export default class MainScene extends Phaser.Scene {
         this.bombs = this.physics.add.group();
 
         this.physics.add.collider(this.bombs, platforms);
-        this.physics.add.collider(this.player, this.bombs, this.hitBomb, undefined, this);
+        this.physics.add.collider(this.player.sprite, this.bombs, this.hitBomb, undefined, this);
 
         const points = [
             20, 550,
@@ -140,7 +138,7 @@ export default class MainScene extends Phaser.Scene {
                         true
                     )
             })
-            const x = (this.player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+            const x = (this.player.sprite.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
             const bomb = this.bombs.create(x, 16, assets.bomb.key);
             bomb.setBounce(1);
             bomb.setCollideWorldBounds(true);
@@ -149,17 +147,16 @@ export default class MainScene extends Phaser.Scene {
     }
 
     hitBomb(
-        player: Phaser.Types.Physics.Arcade.GameObjectWithBody,
+        _sprite: Phaser.Types.Physics.Arcade.GameObjectWithBody,
         _bomb: Phaser.Types.Physics.Arcade.GameObjectWithBody
     ) {
         this.physics.pause();
-        (player as Phaser.Physics.Arcade.Sprite).setTint(0xff0000);
-        (player as Phaser.Physics.Arcade.Sprite).anims.play('turn');
         this.gameOver = true;
     }
 
     update(_time: number, _delta: number) {
-        const distanceBetweenPlayerAndTerrain = Phaser.Math.Distance.BetweenPoints(this.terrain.getCenter(), this.player.getCenter())
+        this.player.update(_time, _delta)
+        const distanceBetweenPlayerAndTerrain = Phaser.Math.Distance.BetweenPoints(this.terrain.getCenter(), this.player.sprite.getCenter())
         const thresholdForInteractionDistance = 200
         const distanceRatio = distanceBetweenPlayerAndTerrain / thresholdForInteractionDistance
         if (distanceBetweenPlayerAndTerrain < thresholdForInteractionDistance) {
@@ -175,36 +172,14 @@ export default class MainScene extends Phaser.Scene {
             this.terrainOutline.setVisible(false)
         }
 
-        this.debugText.setText(`(${this.player.x.toFixed(0)}, ${this.player.y.toFixed(0)})`)
-        this.debugText.setPosition(this.player.x, this.player.y - 50)
+        this.debugText.setText(`(${this.player.sprite.x.toFixed(0)}, ${this.player.sprite.y.toFixed(0)})`)
+        this.debugText.setPosition(this.player.sprite.x, this.player.sprite.y - 50)
 
         if (this.gameOver) {
             this.add.text(50, 50, `GAME OVER`, {fontSize: '64px', color: colors.black});
             this.scoreText.destroy()
             this.scene.pause()
             return
-        }
-
-        const cursors = this.input.keyboard.createCursorKeys();
-        const speed = 320
-
-        if (cursors.left.isDown) {
-            this.player.setVelocityX(-speed);
-            this.player.anims.play('left', true);
-        } else if (cursors.right.isDown) {
-            this.player.setVelocityX(speed);
-            this.player.anims.play('right', true);
-        } else {
-            this.player.setVelocityX(0);
-            this.player.anims.play('turn');
-        }
-
-        if (cursors.up.isDown) {
-            this.player.setVelocityY(-speed);
-        } else if (cursors.down.isDown) {
-            this.player.setVelocityY(speed);
-        } else {
-            this.player.setVelocityY(0)
         }
     }
 }

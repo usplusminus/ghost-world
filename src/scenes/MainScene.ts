@@ -1,8 +1,8 @@
 import Phaser from 'phaser';
 import assets from "../assets";
-import {colors} from "./colors";
 import {Player} from "../gameobjects/Player";
 import {Spider} from "../gameobjects/Spider";
+import {semanticColors} from "./colors";
 
 export default class MainScene extends Phaser.Scene {
     private player: Player;
@@ -37,7 +37,7 @@ export default class MainScene extends Phaser.Scene {
         this.player = new Player(this)
         this.spider = new Spider(this)
 
-        this.cameras.main.startFollow(this.player, true, 0.09, 0.09);
+        this.cameras.main.startFollow(this.player.sprite, true, 0.09, 0.09);
 
         this.physics.add.collider(this.player.sprite, platforms)
 
@@ -55,7 +55,7 @@ export default class MainScene extends Phaser.Scene {
 
         const storyText = "What if you could trace the lineage of ideas from person to person throughout history"
         path.getSpacedPoints(storyText.length).map((point, idx) =>
-            this.add.text(point.x, point.y, storyText.at(idx) ?? "", {fontSize: '32px', color: colors.secondary})
+            this.add.text(point.x, point.y, storyText.at(idx) ?? "", {fontSize: '32px', color: semanticColors.primary})
         )
     }
 

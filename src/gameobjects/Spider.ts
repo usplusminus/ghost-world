@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import {hexColors} from "../scenes/colors";
+import {HexColor} from "../scenes/colors";
 
 type Point = {
     x: number,
@@ -25,8 +25,8 @@ export class Spider extends Phaser.GameObjects.Graphics {
     constructor(scene: Phaser.Scene) {
         super(scene);
 
-        this.pointGraphics = this.scene.add.graphics({lineStyle: {width: 3.0, color: hexColors.black, alpha: 1.0}})
-        this.lineGraphics = this.scene.add.graphics({lineStyle: {width: 0.5, color: hexColors.black, alpha: 1.0}})
+        this.pointGraphics = this.scene.add.graphics({lineStyle: {width: 3.0, color: HexColor.white, alpha: 1.0}})
+        this.lineGraphics = this.scene.add.graphics({lineStyle: {width: 0.5, color: HexColor.white, alpha: 1.0}})
 
         this.points = many(100, () => {
             return {

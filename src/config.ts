@@ -1,11 +1,11 @@
 import Phaser from "phaser";
-import {colors} from "./scenes/colors";
+import {semanticColors} from "./scenes/colors";
 
 export const gameConfig = (canvasElement: HTMLCanvasElement): Phaser.Types.Core.GameConfig => {
     return {
         type: Phaser.CANVAS,
         canvas: canvasElement,
-        backgroundColor: colors.primary,
+        backgroundColor: semanticColors.background,
         scale: {
             width: canvasElement.width,
             height: canvasElement.height,

@@ -7,8 +7,8 @@ export const gameConfig = (canvasElement: HTMLCanvasElement): Phaser.Types.Core.
         canvas: canvasElement,
         backgroundColor: colors.primary,
         scale: {
-            width: 800,
-            height: 600,
+            width: canvasElement.width,
+            height: canvasElement.height,
             mode: Phaser.Scale.FIT,
             autoCenter: Phaser.Scale.CENTER_BOTH
         },

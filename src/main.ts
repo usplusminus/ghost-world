@@ -9,6 +9,3 @@ canvasElement.height = window.innerHeight
 appRoot.appendChild(canvasElement)
 
 setupGame(canvasElement)
-
-// import {startSpiders} from "./spider";
-// startSpiders(canvasElement)

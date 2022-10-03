@@ -1,11 +1,11 @@
-const { sin, cos, PI, hypot, min, max } = Math;
-let w, h;
-let ctx;
+let w: number, h: number;
+let ctx: CanvasRenderingContext2D;
 
 
 export function startSpiders(canvas: HTMLCanvasElement) {
-    ctx = canvas.getContext("2d");
-    const spiders = many(2, spawn)
+    ctx = canvas.getContext("2d")!;
+    // const spiders = many(2, spawn)
+    const spiders = [spawn()]
 
     addEventListener("mousemove", (e) => {
         spiders.forEach(spider => {
@@ -25,35 +25,43 @@ export function startSpiders(canvas: HTMLCanvasElement) {
     });
 }
 
+type Point = {
+    x: number,
+    y: number,
+    len?: number,
+    r?: number,
+    t?: number
+}
+
 function spawn() {
 
-    const pts = many(100, () => {
+    const pts: Point[] = many(100, () => {
         return {
-            x: rnd(innerWidth),
-            y: rnd(innerHeight),
+            x: randomInRange(innerWidth),
+            y: randomInRange(innerHeight),
             len: 0,
             r: 0
         };
     });
 
-    const pts2 = many(9, (i) => {
+    const pts2: Point[] = many(9, (idx) => {
         return {
-            x: cos((i / 9) * PI * 2),
-            y: sin((i / 9) * PI * 2)
+            x: Math.cos((idx / 9) * Math.PI * 2),
+            y: Math.sin((idx / 9) * Math.PI * 2)
         };
     });
 
-    let seed = rnd(100)
-    let tx = rnd(innerWidth);
-    let ty = rnd(innerHeight);
-    let x = rnd(innerWidth)
-    let y = rnd(innerHeight)
-    let kx = rnd(0.5, 0.5)
-    let ky = rnd(0.5, 0.5)
-    let walkRadius = pt(rnd(50,50), rnd(50,50))
-    let r = innerWidth / rnd(100, 150);
+    let seed = randomInRange(100)
+    let tx = randomInRange(innerWidth);
+    let ty = randomInRange(innerHeight);
+    let x = randomInRange(innerWidth)
+    let y = randomInRange(innerHeight)
+    let kx = randomInRange(0.5, 0.5)
+    let ky = randomInRange(0.5, 0.5)
+    let walkRadius = point(randomInRange(50,50), randomInRange(50,50))
+    let r = innerWidth / randomInRange(100, 150);
 
-    function paintPt(pt){
+    function paintPoint(pt: Point){
         pts2.forEach((pt2) => {
             if (!pt.len )
                 return
@@ -64,60 +72,55 @@ function spawn() {
                 y + pt2.y * r
             );
         });
-        drawCircle(pt.x, pt.y, pt.r);
+        drawCircle(pt.x, pt.y, pt.r!);
     }
 
     return {
-        follow(x,y) {
+        follow(x: number, y: number) {
             tx = x;
             ty = y;
         },
 
-        tick(t) {
+        tick(time: number) {
 
-            const selfMoveX = cos(t*kx+seed)*walkRadius.x
-            const selfMoveY = sin(t*ky+seed)*walkRadius.y
-            let fx = tx + selfMoveX;
-            let fy = ty + selfMoveY;
+            const selfMoveX = Math.cos(time * kx + seed) * walkRadius.x
+            const selfMoveY = Math.sin(time * ky + seed) * walkRadius.y
+            const fx = tx + selfMoveX;
+            const fy = ty + selfMoveY;
 
-            x += min(innerWidth/100, (fx - x)/10)
-            y += min(innerWidth/100, (fy - y)/10)
+            x += Math.min(innerWidth/100, (fx - x)/10)
+            y += Math.min(innerWidth/100, (fy - y)/10)
 
             let i = 0
-            pts.forEach((pt) => {
-                const dx = pt.x - x,
-                    dy = pt.y - y;
-                const len = hypot(dx, dy);
-                let r = min(2, innerWidth / len / 5);
-                pt.t = 0;
-                const increasing = len < innerWidth / 10
+            pts.forEach((point) => {
+                const distanceFromPointToSpider = Math.hypot(point.x - x, point.y - y);
+                let newPointRadius = Math.min(2, innerWidth / distanceFromPointToSpider / 5);
+                point.t = 0;
+                const isIncreasing = distanceFromPointToSpider < innerWidth / 10
                     && (i++) < 8;
-                let dir = increasing ? 0.1 : -0.1;
-                if (increasing) {
-                    r *= 1.5;
+                const direction = isIncreasing ? 0.1 : -0.1;
+                if (isIncreasing) {
+                    newPointRadius *= 1.5;
                 }
-                pt.r = r;
-                pt.len = max(0, min(pt.len + dir, 1));
-                paintPt(pt)
+                point.r = newPointRadius;
+                point.len = Math.max(0, Math.min(point.len! + direction, 1));
+                paintPoint(point)
             });
-
-
-
         }
     }
 }
 
-function rnd(x = 1, dx = 0) {
-    return Math.random() * x + dx;
+function randomInRange(max = 1, offset = 0) {
+    return Math.random() * max + offset;
 }
 
-function drawCircle(x, y, r) {
+function drawCircle(x: number, y: number, r: number) {
     ctx.beginPath();
-    ctx.ellipse(x, y, r, r, 0, 0, PI * 2);
+    ctx.ellipse(x, y, r, r, 0, 0, Math.PI * 2);
     ctx.fill();
 }
 
-function drawLine(x0, y0, x1, y1) {
+function drawLine(x0: number, y0: number, x1: number, y1: number) {
     ctx.beginPath();
     ctx.moveTo(x0, y0);
 
@@ -132,22 +135,22 @@ function drawLine(x0, y0, x1, y1) {
     ctx.stroke();
 }
 
-function many(n, f) {
-    return [...Array(n)].map((_, i) => f(i));
+function many(n: number, f: (i: number) => any) {
+    return [...Array(n)].map((_, i: number) => f(i));
 }
 
-function lerp(a, b, t) {
+function lerp(a: number, b: number, t: number) {
     return a + (b - a) * t;
 }
 
-function noise(x, y, t = 101) {
-    let w0 = sin(0.3 * x + 1.4 * t + 2.0 +
-        2.5 * sin(0.4 * y + -1.3 * t + 1.0));
-    let w1 = sin(0.2 * y + 1.5 * t + 2.8 +
-        2.3 * sin(0.5 * x + -1.2 * t + 0.5));
+function noise(x: number, y: number, t = 101) {
+    const w0 = Math.sin(0.3 * x + 1.4 * t + 2.0 +
+        2.5 * Math.sin(0.4 * y + -1.3 * t + 1.0));
+    const w1 = Math.sin(0.2 * y + 1.5 * t + 2.8 +
+        2.3 * Math.sin(0.5 * x + -1.2 * t + 0.5));
     return w0 + w1;
 }
 
-function pt(x,y){
-    return {x,y}
+function point(x: number, y: number): Point {
+    return { x, y}
 }

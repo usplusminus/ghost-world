@@ -1,6 +1,7 @@
+import {colors} from "./scenes/colors";
+
 let w: number, h: number;
 let ctx: CanvasRenderingContext2D;
-
 
 export function startSpiders(canvas: HTMLCanvasElement) {
     ctx = canvas.getContext("2d")!;
@@ -16,9 +17,9 @@ export function startSpiders(canvas: HTMLCanvasElement) {
     requestAnimationFrame(function anim(t) {
         if (w !== innerWidth) w = canvas.width = innerWidth;
         if (h !== innerHeight) h = canvas.height = innerHeight;
-        ctx.fillStyle = "#000";
+        ctx.fillStyle = colors.white;
         drawCircle(0, 0, w * 10);
-        ctx.fillStyle = ctx.strokeStyle = "#fff";
+        ctx.fillStyle = ctx.strokeStyle = colors.white;
         t/=1000
         spiders.forEach(spider => spider.tick(t))
         requestAnimationFrame(anim);
@@ -35,7 +36,7 @@ type Point = {
 
 function spawn() {
 
-    const pts: Point[] = many(100, () => {
+    const points: Point[] = many(100, () => {
         return {
             x: randomInRange(innerWidth),
             y: randomInRange(innerHeight),
@@ -44,7 +45,7 @@ function spawn() {
         };
     });
 
-    const pts2: Point[] = many(9, (idx) => {
+    const points2: Point[] = many(9, (idx) => {
         return {
             x: Math.cos((idx / 9) * Math.PI * 2),
             y: Math.sin((idx / 9) * Math.PI * 2)
@@ -62,7 +63,7 @@ function spawn() {
     let r = innerWidth / randomInRange(100, 150);
 
     function paintPoint(pt: Point){
-        pts2.forEach((pt2) => {
+        points2.forEach((pt2) => {
             if (!pt.len )
                 return
             drawLine(
@@ -92,7 +93,7 @@ function spawn() {
             y += Math.min(innerWidth/100, (fy - y)/10)
 
             let i = 0
-            pts.forEach((point) => {
+            points.forEach((point) => {
                 const distanceFromPointToSpider = Math.hypot(point.x - x, point.y - y);
                 let newPointRadius = Math.min(2, innerWidth / distanceFromPointToSpider / 5);
                 point.t = 0;
@@ -110,10 +111,6 @@ function spawn() {
     }
 }
 
-function randomInRange(max = 1, offset = 0) {
-    return Math.random() * max + offset;
-}
-
 function drawCircle(x: number, y: number, r: number) {
     ctx.beginPath();
     ctx.ellipse(x, y, r, r, 0, 0, Math.PI * 2);
@@ -124,8 +121,9 @@ function drawLine(x0: number, y0: number, x1: number, y1: number) {
     ctx.beginPath();
     ctx.moveTo(x0, y0);
 
-    many(100, (i) => {
-        i = (i + 1) / 100;
+    const n = 100
+    many(n, (i) => {
+        i = (i + 1) / n;
         let x = lerp(x0, x1, i);
         let y = lerp(y0, y1, i);
         let k = noise(x/5+x0, y/5+y0) * 2;
@@ -133,6 +131,10 @@ function drawLine(x0: number, y0: number, x1: number, y1: number) {
     });
 
     ctx.stroke();
+}
+
+function randomInRange(max = 1, offset = 0) {
+    return Math.random() * max + offset;
 }
 
 function many(n: number, f: (i: number) => any) {

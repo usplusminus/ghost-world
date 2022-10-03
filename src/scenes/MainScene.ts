@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import assets from "../assets";
 import {colors} from "./colors";
 import {Player} from "../gameobjects/Player";
+import {Spider} from "../gameobjects/Spider";
 
 export default class MainScene extends Phaser.Scene {
     private player: Player;
@@ -14,6 +15,7 @@ export default class MainScene extends Phaser.Scene {
     private terrain: Phaser.GameObjects.Image;
     private terrainOutline: Phaser.GameObjects.Rectangle;
     private notificationSound: Phaser.Sound.BaseSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound;
+    private spider: Spider;
 
     constructor() {
         super('MainScene');
@@ -58,6 +60,7 @@ export default class MainScene extends Phaser.Scene {
         this.terrainOutline.setVisible(false)
 
         this.player = new Player(this)
+        this.spider = new Spider(this)
 
         this.cameras.main.startFollow(this.player, true, 0.09, 0.09);
 
@@ -95,8 +98,8 @@ export default class MainScene extends Phaser.Scene {
         this.physics.add.collider(this.stars, platforms);
         this.physics.add.overlap(this.player.sprite, this.stars, this.collectStar, undefined, this);
 
-        this.scoreText = this.add.text(16, 16, `score: ${this.score}`, {fontSize: '32px', color: colors.black});
-        this.debugText = this.add.text(16, 16, "", {fontSize: '32px', color: colors.black});
+        this.scoreText = this.add.text(16, 16, `score: ${this.score}`, {fontSize: '32px', color: colors.secondary});
+        this.debugText = this.add.text(16, 16, "", {fontSize: '32px', color: colors.secondary});
 
         this.bombs = this.physics.add.group();
 
@@ -117,7 +120,7 @@ export default class MainScene extends Phaser.Scene {
 
         const storyText = "What if you could trace the lineage of ideas from person to person throughout history"
         path.getSpacedPoints(storyText.length).map((point, idx) =>
-            this.add.text(point.x, point.y, storyText.at(idx) ?? "", {fontSize: '32px', color: colors.black})
+            this.add.text(point.x, point.y, storyText.at(idx) ?? "", {fontSize: '32px', color: colors.secondary})
         )
     }
 
@@ -156,6 +159,7 @@ export default class MainScene extends Phaser.Scene {
 
     update(_time: number, _delta: number) {
         this.player.update(_time, _delta)
+        this.spider.update(_time, _delta)
         const distanceBetweenPlayerAndTerrain = Phaser.Math.Distance.BetweenPoints(this.terrain.getCenter(), this.player.sprite.getCenter())
         const thresholdForInteractionDistance = 200
         const distanceRatio = distanceBetweenPlayerAndTerrain / thresholdForInteractionDistance
@@ -176,7 +180,7 @@ export default class MainScene extends Phaser.Scene {
         this.debugText.setPosition(this.player.sprite.x, this.player.sprite.y - 50)
 
         if (this.gameOver) {
-            this.add.text(50, 50, `GAME OVER`, {fontSize: '64px', color: colors.black});
+            this.add.text(50, 50, `GAME OVER`, {fontSize: '64px', color: colors.secondary});
             this.scoreText.destroy()
             this.scene.pause()
             return

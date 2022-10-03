@@ -10,6 +10,26 @@ export class Player extends Phaser.GameObjects.Graphics {
         this.sprite = this.scene.physics.add.sprite(100, 450, assets.dude.key);
         this.sprite.setBounce(0.2);
         // this.player.setCollideWorldBounds(true);
+
+        this.scene.anims.create({
+            key: "left",
+            frames: this.scene.anims.generateFrameNumbers(assets.dude.key, {start: 0, end: 3}),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        this.scene.anims.create({
+            key: 'turn',
+            frames: [{key: assets.dude.key, frame: 4}],
+            frameRate: 20
+        });
+
+        this.scene.anims.create({
+            key: 'right',
+            frames: this.scene.anims.generateFrameNumbers(assets.dude.key, {start: 5, end: 8}),
+            frameRate: 10,
+            repeat: -1
+        });
     }
 
     override update(_time: number, _delta: number) {

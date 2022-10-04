@@ -1,5 +1,5 @@
-export function random(a = 1, b = 0) {
-    return Math.random() * a + b;
+export function random(x = 1, b = 0) {
+    return Math.random() * x + b;
 }
 
 export function randomInRange(a: number, b: number) {

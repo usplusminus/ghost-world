@@ -31,7 +31,7 @@ export default class MainScene extends Phaser.Scene {
 
     setupTextPaths(){
         const dinnerPathPoints = [
-            new Phaser.Math.Vector2(-20, 1550),
+            new Phaser.Math.Vector2(-700, 1550),
             new Phaser.Math.Vector2(-500, 1000),
             new Phaser.Math.Vector2(-700, 400),
             new Phaser.Math.Vector2(-500, -400),
@@ -74,6 +74,12 @@ export default class MainScene extends Phaser.Scene {
     update(time: number, _delta: number) {
         this.spider.update(time, _delta)
         this.textPath.forEach(ch => ch.setRotation(ch.rotation + (Math.random() > 0.5 ? .01 : -.01)))
-        this.foodImage.setVisible(Math.random() > .98 )
+
+        const distanceBetweenSpiderAndFoodImage = this.foodImage.getCenter().distance({x: this.spider.x, y: this.spider.y})
+        if (distanceBetweenSpiderAndFoodImage < 500)
+            this.foodImage.setVisible(true)
+        else
+            this.foodImage.setVisible(Math.random() > .98 )
+
     }
 }

@@ -17,3 +17,12 @@ export function noise(x: number, y: number, t = 101) {
         2.3 * Math.sin(0.5 * x + -1.2 * t + 0.5));
     return w0 + w1;
 }
+
+
+export function sampleList<T>(a: T[]): T {
+    return a.at(Math.round(Math.random() * a.length - 1))!
+}
+
+export function sampleString(s: string): string {
+    return sampleList(s.split(""))
+}

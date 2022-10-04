@@ -32,10 +32,12 @@ export class Spider extends Phaser.GameObjects.Graphics {
         })
         this.velocity = {horizontal: 0, vertical: 0}
 
-        this.circles = many(1000, () => {
+        // TODO: huge room for performance improvement here
+        // TODO: we don't need to render more points than necessary for surrounding the spider
+        this.circles = many(2000, () => {
             return {
-                x: randomInRange(-innerWidth, innerWidth),
-                y: randomInRange(-innerHeight, innerHeight),
+                x: randomInRange(-innerWidth * 2, innerWidth * 2),
+                y: randomInRange(-innerHeight * 2, innerHeight * 2),
                 len: 0,
                 radius: 0,
             };

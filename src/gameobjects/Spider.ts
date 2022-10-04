@@ -1,42 +1,22 @@
 import Phaser from "phaser";
 import {lerp, noise, random, randomInRange} from "../math";
 import {HexColor} from "../scenes/colors";
-
-function point(x: number, y: number): Point {
-    return {x, y}
-}
+import {Circle, point, Point, Velocity} from "../physics";
 
 function many(n: number, f: (i: number) => any) {
     return [...Array(n)].map((_, i: number) => f(i));
 }
 
-type Point = {
-    x: number,
-    y: number,
-}
-
-type Circle = {
-    x: number,
-    y: number,
-    len: number,
-    radius: number,
-}
-
-type Velocity = {
-    horizontal: number,
-    vertical: number
-}
-
 export class Spider extends Phaser.GameObjects.Graphics {
     private circles: Circle[];
     private points: Point[];
-    private seed: number;
+    private readonly seed: number;
     private targetX: number;
     private targetY: number;
-    private verticalAcceleration: number;
-    private horizontalAcceleration: number;
+    private readonly verticalAcceleration: number;
+    private readonly horizontalAcceleration: number;
     private walkRadius: Point;
-    private bodyRadius: number;
+    private readonly bodyRadius: number;
     private graphics: Phaser.GameObjects.Graphics;
     private cursors: Phaser.Types.Input.Keyboard.CursorKeys;
     private velocity: Velocity;

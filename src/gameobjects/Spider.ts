@@ -1,5 +1,14 @@
 import Phaser from "phaser";
+import {lerp, noise, random, randomInRange} from "../math";
 import {HexColor} from "../scenes/colors";
+
+function point(x: number, y: number): Point {
+    return {x, y}
+}
+
+function many(n: number, f: (i: number) => any) {
+    return [...Array(n)].map((_, i: number) => f(i));
+}
 
 type Point = {
     x: number,
@@ -13,33 +22,35 @@ type Circle = {
     radius: number,
 }
 
+type Velocity = {
+    horizontal: number,
+    vertical: number
+}
+
 export class Spider extends Phaser.GameObjects.Graphics {
     private circles: Circle[];
     private points: Point[];
     private seed: number;
-    private tx: number;
-    private ty: number;
+    private targetX: number;
+    private targetY: number;
     private kx: number;
     private ky: number;
     private walkRadius: Point;
     private r: number;
     private graphics: Phaser.GameObjects.Graphics;
+    private cursors: Phaser.Types.Input.Keyboard.CursorKeys;
+    private velocity: Velocity;
+
+    SPIDER_SPEED = 10;
 
     constructor(scene: Phaser.Scene) {
         super(scene);
-
-        this.graphics = this.scene.add.graphics({fillStyle: { color: HexColor.white }, lineStyle: {width: 0.5, color: HexColor.white, alpha: 1.0}})
-
-
-        // TODO: the points don't go out of (0, 0) -> decenter the playing area in some way or generate then points over a larger distance
-        // const debugGraphics = this.scene.add.graphics({fillStyle: { color: HexColor.white }, lineStyle: {width: 0.5, color: HexColor.white, alpha: 1.0}})
-        // const circle = {
-        //     x: 0,
-        //     y: 0,
-        //     len: 0,
-        //     radius: 10
-        // }
-        // debugGraphics.fillCircle(circle.x, circle.y, circle.radius)
+        this.cursors = this.scene.input.keyboard.createCursorKeys();
+        this.graphics = this.scene.add.graphics({
+            fillStyle: {color: HexColor.white},
+            lineStyle: {width: 0.5, color: HexColor.white, alpha: 1.0}
+        })
+        this.velocity = {horizontal: 0, vertical: 0}
 
         this.circles = many(1000, () => {
             return {
@@ -49,7 +60,11 @@ export class Spider extends Phaser.GameObjects.Graphics {
                 radius: 0
             };
         });
-        this.circles.forEach(circle => this.drawCircle(circle))
+        // TODO: the points don't go out of (0, 0) -> decenter the playing area in some way or generate then points over a larger distance, possibly in a dynamic way
+        // const debugGraphics = this.scene.add.graphics({fillStyle: { color: HexColor.white }, lineStyle: {width: 0.5, color: HexColor.white, alpha: 1.0}})
+        // this.circles
+        //     .map(circle => ({...circle, radius : 2 }))
+        //     .forEach(circle => debugGraphics.fillCircle(circle.x, circle.y, circle.radius))
 
         this.points = many(9, (idx) => point(
             Math.cos((idx / 9) * Math.PI * 2),
@@ -58,8 +73,8 @@ export class Spider extends Phaser.GameObjects.Graphics {
 
         const maxRadius = 150
         this.seed = random(100)
-        this.tx = random(innerWidth);
-        this.ty = random(innerHeight);
+        this.targetX = random(innerWidth);
+        this.targetY = random(innerHeight);
         this.x = 0
         this.y = 0
         this.kx = random(0.5, 0.5)
@@ -70,6 +85,7 @@ export class Spider extends Phaser.GameObjects.Graphics {
 
     update(_time: number, _delta: number) {
         this.graphics.clear()
+        this.getUserInputs()
         this.tick(_time / 1000)
     }
 
@@ -88,10 +104,14 @@ export class Spider extends Phaser.GameObjects.Graphics {
     }
 
     tick(time: number) {
+        if (this.velocity.horizontal !== 0) this.targetX = this.targetX + this.velocity.horizontal
+        if (this.velocity.vertical !== 0) this.targetY = this.targetY + this.velocity.vertical
+
         const selfMoveX = Math.cos(time * this.kx + this.seed) * this.walkRadius.x
         const selfMoveY = Math.sin(time * this.ky + this.seed) * this.walkRadius.y
-        const fx = this.tx + selfMoveX;
-        const fy = this.ty + selfMoveY;
+        const fx = this.targetX + selfMoveX;
+        const fy = this.targetY + selfMoveY;
+
 
         this.x += Math.min(innerWidth / 100, (fx - this.x) / 10)
         this.y += Math.min(innerWidth / 100, (fy - this.y) / 10)
@@ -112,7 +132,7 @@ export class Spider extends Phaser.GameObjects.Graphics {
         });
     }
 
-    drawCircle(circle : Circle) {
+    drawCircle(circle: Circle) {
         this.graphics.fillCircle(circle.x, circle.y, circle.radius)
     }
 
@@ -130,32 +150,22 @@ export class Spider extends Phaser.GameObjects.Graphics {
         this.graphics.closePath()
         this.graphics.stroke()
     }
-}
 
-function random(scale = 1, offset = 0) {
-    return Math.random() * scale + offset;
-}
+    private getUserInputs() {
+        if (this.cursors.left.isDown) {
+            this.velocity.horizontal = -this.SPIDER_SPEED
+        } else if (this.cursors.right.isDown) {
+            this.velocity.horizontal = this.SPIDER_SPEED
+        } else {
+            this.velocity.horizontal = 0
+        }
 
-function randomInRange(a: number, b: number) {
-    return Math.random() * (b - a) + a;
-}
-
-function many(n: number, f: (i: number) => any) {
-    return [...Array(n)].map((_, i: number) => f(i));
-}
-
-function lerp(a: number, b: number, t: number) {
-    return a + (b - a) * t;
-}
-
-function noise(x: number, y: number, t = 101) {
-    const w0 = Math.sin(0.3 * x + 1.4 * t + 2.0 +
-        2.5 * Math.sin(0.4 * y + -1.3 * t + 1.0));
-    const w1 = Math.sin(0.2 * y + 1.5 * t + 2.8 +
-        2.3 * Math.sin(0.5 * x + -1.2 * t + 0.5));
-    return w0 + w1;
-}
-
-function point(x: number, y: number): Point {
-    return {x, y}
+        if (this.cursors.up.isDown) {
+            this.velocity.vertical = -this.SPIDER_SPEED
+        } else if (this.cursors.down.isDown) {
+            this.velocity.vertical = this.SPIDER_SPEED
+        } else {
+            this.velocity.vertical = 0
+        }
+    }
 }

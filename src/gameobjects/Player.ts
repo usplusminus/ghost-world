@@ -3,6 +3,7 @@ import assets from "../assets";
 
 export class Player extends Phaser.GameObjects.Graphics {
     sprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
+    private cursors: Phaser.Types.Input.Keyboard.CursorKeys;
 
     constructor(scene: Phaser.Scene) {
         super(scene);
@@ -30,16 +31,16 @@ export class Player extends Phaser.GameObjects.Graphics {
             frameRate: 10,
             repeat: -1
         });
+        this.cursors = this.scene.input.keyboard.createCursorKeys();
     }
 
     override update(_time: number, _delta: number) {
-        const cursors = this.scene.input.keyboard.createCursorKeys();
         const speed = 320
 
-        if (cursors.left.isDown) {
+        if (this.cursors.left.isDown) {
             this.sprite.setVelocityX(-speed);
             this.sprite.anims.play('left', true);
-        } else if (cursors.right.isDown) {
+        } else if (this.cursors.right.isDown) {
             this.sprite.setVelocityX(speed);
             this.sprite.anims.play('right', true);
         } else {
@@ -47,9 +48,9 @@ export class Player extends Phaser.GameObjects.Graphics {
             this.sprite.anims.play('turn');
         }
 
-        if (cursors.up.isDown) {
+        if (this.cursors.up.isDown) {
             this.sprite.setVelocityY(-speed);
-        } else if (cursors.down.isDown) {
+        } else if (this.cursors.down.isDown) {
             this.sprite.setVelocityY(speed);
         } else {
             this.sprite.setVelocityY(0)

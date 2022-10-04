@@ -5,7 +5,8 @@ export const Color = {
 
 export const HexColor = {
     black : 0x000000,
-    white : 0xffffff
+    white : 0xffffff,
+    red: 0xAA4A44
 }
 
 export const semanticColors = {

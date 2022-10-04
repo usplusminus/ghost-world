@@ -2,12 +2,10 @@ import Phaser from 'phaser';
 import assets from "../assets";
 import {Spider} from "../gameobjects/Spider";
 import {semanticColors} from "./colors";
-import {debugGraphicsConfig} from "../gameobjects/graphics";
 
 export default class MainScene extends Phaser.Scene {
     private spider: Spider;
     private textPath: Phaser.GameObjects.Text[];
-    private debugGraphics: Phaser.GameObjects.Graphics;
     private foodImage: Phaser.GameObjects.Image;
 
     constructor() {
@@ -20,7 +18,6 @@ export default class MainScene extends Phaser.Scene {
     }
 
     create() {
-        this.debugGraphics = this.add.graphics(debugGraphicsConfig)
         this.cameras.main.setZoom(0.5);
         this.spider = new Spider(this)
         this.cameras.main.centerOn(this.spider.x, this.spider.y);
@@ -59,7 +56,6 @@ export default class MainScene extends Phaser.Scene {
             new Phaser.Math.Vector2(550, 145),
             new Phaser.Math.Vector2(745, 256)
         ].map(v => v.scale(3))
-        points.forEach(point => this.debugGraphics.fillCircle(point.x, point.y, 10))
         const path = new Phaser.Curves.Spline(points)
         const storyText = "What if you could trace the lineage of ideas from person to person throughout history"
         this.textPath = path

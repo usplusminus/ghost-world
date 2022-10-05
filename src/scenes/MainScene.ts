@@ -7,6 +7,9 @@ export default class MainScene extends Phaser.Scene {
     private spider: Spider;
     private textPath: Phaser.GameObjects.Text[];
     private foodImage: Phaser.GameObjects.Image;
+    private lemonImage: Phaser.GameObjects.Image;
+    private limeImage: Phaser.GameObjects.Image;
+    private dinnerAssetsGroup: Phaser.GameObjects.Group;
 
     constructor() {
         super('MainScene');
@@ -15,6 +18,8 @@ export default class MainScene extends Phaser.Scene {
     preload() {
         this.load.audio(assets.sounds.notification.key, assets.sounds.notification.filepath);
         this.load.image(assets.images.food.key, assets.images.food.filepath);
+        this.load.image(assets.images.lemon.key, assets.images.lemon.filepath);
+        this.load.image(assets.images.lime.key, assets.images.lime.filepath);
     }
 
     create() {
@@ -47,7 +52,22 @@ export default class MainScene extends Phaser.Scene {
         })
 
         const imagePosition = dinnerPathPoints.at(-1)!
-        this.foodImage = this.add.image(imagePosition.x, imagePosition.y, assets.images.food.key)
+        this.limeImage = this.add.image(
+            imagePosition.x,
+            imagePosition.y,
+            assets.images.lime.key
+        ).setScale(0.5, 0.5)
+        this.foodImage = this.add.image(
+            imagePosition.x - 300,
+            imagePosition.y - 200,
+            assets.images.food.key
+        ).setVisible(false)
+        this.lemonImage = this.add.image(
+            imagePosition.x - 300,
+            imagePosition.y + 100,
+            assets.images.lemon.key
+        ).setScale(0.5, 0.5).setVisible(false)
+        this.dinnerAssetsGroup = this.add.group([this.limeImage, this.lemonImage, this.foodImage])
 
         const points = [
             new Phaser.Math.Vector2(20, 550),
@@ -71,11 +91,16 @@ export default class MainScene extends Phaser.Scene {
         this.spider.update(time, _delta)
         this.textPath.forEach(ch => ch.setRotation(ch.rotation + (Math.random() > 0.5 ? .01 : -.01)))
 
-        const distanceBetweenSpiderAndFoodImage = this.foodImage.getCenter().distance({x: this.spider.x, y: this.spider.y})
-        if (distanceBetweenSpiderAndFoodImage < 500)
-            this.foodImage.setVisible(true)
-        else
-            this.foodImage.setVisible(Math.random() > .98 )
+        const distanceBetweenSpiderAndFoodImage = this.limeImage.getCenter().distance({x: this.spider.x, y: this.spider.y})
+        if (distanceBetweenSpiderAndFoodImage < 500) {
+            this.dinnerAssetsGroup.setVisible(true)
+            this.dinnerAssetsGroup.rotate(Math.random() > 0.5 ? .01 : -.01)
+        }
+        else {
+            this.limeImage.setVisible(Math.random() > .98 )
+            this.lemonImage.setVisible(false)
+            this.foodImage.setVisible(false)
+        }
 
     }
 }

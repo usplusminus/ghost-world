@@ -9,6 +9,14 @@ export default {
         food : {
             key: "food",
             filepath: "assets/images/food.png"
+        },
+        lemon : {
+            key: "lemon",
+            filepath: "assets/images/lemon.png"
+        },
+        lime : {
+            key: "lime",
+            filepath: "assets/images/lime.png"
         }
     }
 }

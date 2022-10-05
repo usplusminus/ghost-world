@@ -65,10 +65,10 @@ export class Spider extends Phaser.GameObjects.Graphics {
         this.bodyRadius = 2
     }
 
-    update(_time: number, _delta: number) {
+    update(time: number, _delta: number) {
         this.graphics.clear()
         this.getUserInputs()
-        this.tick(_time / 1000)
+        this.tick(time / 1000)
     }
 
     paintCircle(circle: Circle) {

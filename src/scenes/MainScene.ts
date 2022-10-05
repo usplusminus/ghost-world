@@ -10,16 +10,17 @@ export default class MainScene extends Phaser.Scene {
     private lemonImage: Phaser.GameObjects.Image;
     private limeImage: Phaser.GameObjects.Image;
     private dinnerAssetsGroup: Phaser.GameObjects.Group;
+    private backgroundSound: Phaser.Sound.WebAudioSound;
 
     constructor() {
         super('MainScene');
     }
 
     preload() {
-        this.load.audio(assets.sounds.notification.key, assets.sounds.notification.filepath);
         this.load.image(assets.images.food.key, assets.images.food.filepath);
         this.load.image(assets.images.lemon.key, assets.images.lemon.filepath);
         this.load.image(assets.images.lime.key, assets.images.lime.filepath);
+        this.load.audio(assets.sounds.background.key, assets.sounds.background.filepath);
     }
 
     create() {
@@ -29,6 +30,8 @@ export default class MainScene extends Phaser.Scene {
         const lerpingFactor = 0.2
         this.cameras.main.startFollow(this.spider, true, lerpingFactor, lerpingFactor);
         this.setupTextPaths()
+        this.backgroundSound = this.sound.add(assets.sounds.background.key) as Phaser.Sound.WebAudioSound
+        this.backgroundSound.play({loop: true})
     }
 
     setupTextPaths(){
@@ -92,9 +95,11 @@ export default class MainScene extends Phaser.Scene {
         this.textPath.forEach(ch => ch.setRotation(ch.rotation + (Math.random() > 0.5 ? .01 : -.01)))
 
         const distanceBetweenSpiderAndFoodImage = this.limeImage.getCenter().distance({x: this.spider.x, y: this.spider.y})
-        if (distanceBetweenSpiderAndFoodImage < 500) {
+        const distanceThreshold = 500
+        if (distanceBetweenSpiderAndFoodImage < distanceThreshold) {
             this.dinnerAssetsGroup.setVisible(true)
             this.dinnerAssetsGroup.rotate(Math.random() > 0.5 ? .01 : -.01)
+            this.backgroundSound.setRate(Math.max(0.3, distanceBetweenSpiderAndFoodImage / distanceThreshold))
         }
         else {
             this.limeImage.setVisible(Math.random() > .98 )
@@ -102,5 +107,9 @@ export default class MainScene extends Phaser.Scene {
             this.foodImage.setVisible(false)
         }
 
+        const pan = Math.min(Math.max(this.spider.x / innerWidth, -0.9), 0.9);
+        const detune = Math.min(Math.max(this.spider.y, -900), 900); // range between -1200 and 1200
+        this.backgroundSound.setPan(pan)
+        this.backgroundSound.setDetune(detune)
     }
 }

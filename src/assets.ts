@@ -1,8 +1,8 @@
 export default {
     sounds : {
-        notification : {
-            key: "notification",
-            filepath: "assets/sounds/400697__daphne-in-wonderland__messenger-notification-sound-imitation.mp3"
+        background: {
+            key: "background",
+            filepath: "assets/sounds/194166__klankbeeld__piezo-shipquay-130708-09_compressed.mp3"
         }
     },
     images : {

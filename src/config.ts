@@ -15,7 +15,7 @@ export const gameConfig = (canvasElement: HTMLCanvasElement): Phaser.Types.Core.
         physics: {
             default: "arcade",
             arcade: {
-                gravity: { y: 30 },
+                gravity: { x: 0, y: 0 },
                 debug: false
             }
         }

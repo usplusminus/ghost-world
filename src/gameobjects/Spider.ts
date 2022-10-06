@@ -66,8 +66,6 @@ export class Spider extends Phaser.GameObjects.Graphics {
     }
 
     update(time: number, _delta: number) {
-        this.graphics.clear()
-        this.getUserInputs()
         this.tick(time / 1000)
     }
 
@@ -86,6 +84,8 @@ export class Spider extends Phaser.GameObjects.Graphics {
     }
 
     tick(time: number) {
+        this.getUserInputs()
+
         if (this.velocity.horizontal !== 0) this.targetX = this.targetX + this.velocity.horizontal
         if (this.velocity.vertical !== 0) this.targetY = this.targetY + this.velocity.vertical
 
@@ -96,6 +96,12 @@ export class Spider extends Phaser.GameObjects.Graphics {
 
         this.x += Math.min(innerWidth / 100, (fx - this.x) / 10)
         this.y += Math.min(innerWidth / 100, (fy - this.y) / 10)
+
+        this.draw()
+    }
+
+    draw(){
+        this.graphics.clear()
 
         let i = 0
         this.circles.forEach((circle) => {
@@ -113,11 +119,11 @@ export class Spider extends Phaser.GameObjects.Graphics {
         });
     }
 
-    drawCircle(circle: Circle) {
+    private drawCircle(circle: Circle) {
         this.graphics.fillCircle(circle.x, circle.y, circle.radius)
     }
 
-    drawLine(x0: number, y0: number, x1: number, y1: number) {
+    private drawLine(x0: number, y0: number, x1: number, y1: number) {
         this.graphics.beginPath()
         this.graphics.moveTo(x0, y0)
         const n = 100;

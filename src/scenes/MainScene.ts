@@ -5,6 +5,8 @@ import {semanticColors} from "../colors";
 import Interactable from "../gameobjects/Interactable";
 import {eventEmitter, Events} from "../events";
 
+export const MAIN_SCENE = "MainScene"
+
 export default class MainScene extends Phaser.Scene {
     private spider: Spider;
     private textPath: Phaser.GameObjects.Text[];
@@ -16,7 +18,7 @@ export default class MainScene extends Phaser.Scene {
     private interactableElements: Interactable[];
 
     constructor() {
-        super('MainScene');
+        super(MAIN_SCENE);
     }
 
     preload() {

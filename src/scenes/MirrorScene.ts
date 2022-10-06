@@ -1,8 +1,7 @@
 import Phaser from 'phaser';
 import {Spider} from "../gameobjects/Spider";
 
-
-const MIRROR_SCENE = "MirrorScene"
+export const MIRROR_SCENE = "MirrorScene"
 
 export default class MirrorScene extends Phaser.Scene {
     private primarySpider: Spider;
@@ -30,4 +29,5 @@ export default class MirrorScene extends Phaser.Scene {
         this.mirroredSpider.draw()
         this.debugText.setPosition(this.mirroredSpider.x - 100, this.mirroredSpider.y - 250)
     }
+
 }

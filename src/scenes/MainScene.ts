@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import assets from "../assets";
 import {Spider} from "../gameobjects/Spider";
 import {semanticColors} from "./colors";
+import Interactable from "../gameobjects/Interactable";
 
 export default class MainScene extends Phaser.Scene {
     private spider: Spider;
@@ -11,6 +12,7 @@ export default class MainScene extends Phaser.Scene {
     private limeImage: Phaser.GameObjects.Image;
     private dinnerAssetsGroup: Phaser.GameObjects.Group;
     private backgroundSound: Phaser.Sound.WebAudioSound;
+    private interactableElements: Interactable[];
 
     constructor() {
         super('MainScene');
@@ -32,6 +34,12 @@ export default class MainScene extends Phaser.Scene {
         this.setupTextPaths()
         this.backgroundSound = this.sound.add(assets.sounds.background.key) as Phaser.Sound.WebAudioSound
         this.backgroundSound.play({loop: true})
+
+        this.interactableElements = [
+            new Phaser.Math.Vector2(1500, -500),
+            new Phaser.Math.Vector2(1300, -200)
+        ].map(position => new Interactable(this, position, 50.0, [this.spider]))
+
     }
 
     setupTextPaths(){
@@ -92,6 +100,7 @@ export default class MainScene extends Phaser.Scene {
 
     update(time: number, _delta: number) {
         this.spider.update(time, _delta)
+        this.interactableElements.forEach(element => element.update())
         this.textPath.forEach(ch => ch.setRotation(ch.rotation + (Math.random() > 0.5 ? .01 : -.01)))
 
         const distanceBetweenSpiderAndFoodImage = this.limeImage.getCenter().distance({x: this.spider.x, y: this.spider.y})

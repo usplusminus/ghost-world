@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import {HexColor} from "../scenes/colors";
-
+import {eventEmitter, Events} from "../events";
 
 export default class Interactable extends Phaser.GameObjects.Graphics {
     private readonly graphics: Phaser.GameObjects.Graphics;
@@ -28,11 +28,11 @@ export default class Interactable extends Phaser.GameObjects.Graphics {
         this.graphics.fillCircle(this.position.x, this.position.y, this.radius)
         this.observableObjects.forEach(graphics => {
             if (this.position.distance({ x : graphics.x, y: graphics.y }) < this.radius)
-                this.emitInteractedWith(graphics)
+                this.broadcastInteraction(graphics)
         })
     }
 
-    emitInteractedWith(graphics: Phaser.GameObjects.Graphics) {
-        console.log(`Interacted with graphics with distance ${this.position.distance({x : graphics.x, y: graphics.y}).toFixed(0)}`)
+    broadcastInteraction(_: Phaser.GameObjects.Graphics) {
+        eventEmitter.emit(Events.DINNER)
     }
 }

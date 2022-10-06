@@ -3,6 +3,7 @@ import assets from "../assets";
 import {Spider} from "../gameobjects/Spider";
 import {semanticColors} from "./colors";
 import Interactable from "../gameobjects/Interactable";
+import {eventEmitter, Events} from "../events";
 
 export default class MainScene extends Phaser.Scene {
     private spider: Spider;
@@ -39,6 +40,8 @@ export default class MainScene extends Phaser.Scene {
             new Phaser.Math.Vector2(1500, -500),
             new Phaser.Math.Vector2(1300, -200)
         ].map(position => new Interactable(this, position, 50.0, [this.spider]))
+
+        eventEmitter.on(Events.DINNER, () => console.log(`Dinner scene ${Date.now()}`))
 
     }
 

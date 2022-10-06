@@ -3,7 +3,11 @@ export default {
         background: {
             key: "background",
             filepath: "assets/sounds/194166__klankbeeld__piezo-shipquay-130708-09_compressed.mp3"
-        }
+        },
+        wood: {
+            key: "wood",
+            filepath: "assets/sounds/inumaki_esuzaki001.mp3"
+        },
     },
     images : {
         food : {

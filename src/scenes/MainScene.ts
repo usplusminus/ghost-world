@@ -24,6 +24,7 @@ export default class MainScene extends Phaser.Scene {
         this.load.image(assets.images.lemon.key, assets.images.lemon.filepath);
         this.load.image(assets.images.lime.key, assets.images.lime.filepath);
         this.load.audio(assets.sounds.background.key, assets.sounds.background.filepath);
+        this.load.audio(assets.sounds.wood.key, assets.sounds.wood.filepath);
     }
 
     create() {
@@ -35,13 +36,15 @@ export default class MainScene extends Phaser.Scene {
         this.setupTextPaths()
         this.backgroundSound = this.sound.add(assets.sounds.background.key) as Phaser.Sound.WebAudioSound
         this.backgroundSound.play({loop: true})
+        const woodSound = this.sound.add(assets.sounds.wood.key) as Phaser.Sound.WebAudioSound
+
 
         this.interactableElements = [
             new Phaser.Math.Vector2(1500, -500),
             new Phaser.Math.Vector2(1300, -200)
         ].map(position => new Interactable(this, position, 50.0, [this.spider]))
 
-        eventEmitter.on(Events.DINNER, () => console.log(`Dinner scene ${Date.now()}`))
+        eventEmitter.once(Events.DINNER, () => woodSound.play({ loop: false }))
 
     }
 

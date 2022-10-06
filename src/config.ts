@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import {semanticColors} from "./scenes/colors";
+import {semanticColors} from "./colors";
 
 export const gameConfig = (canvasElement: HTMLCanvasElement): Phaser.Types.Core.GameConfig => {
     return {

@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import {HexColor} from "../scenes/colors";
+import {HexColor} from "../colors";
 import {eventEmitter, Events} from "../events";
 
 export default class Interactable extends Phaser.GameObjects.Graphics {

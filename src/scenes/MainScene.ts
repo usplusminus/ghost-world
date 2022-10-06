@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import assets from "../assets";
 import {Spider} from "../gameobjects/Spider";
-import {semanticColors} from "./colors";
+import {semanticColors} from "../colors";
 import Interactable from "../gameobjects/Interactable";
 import {eventEmitter, Events} from "../events";
 

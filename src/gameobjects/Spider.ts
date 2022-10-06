@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import {lerp, noise, random, randomInRange} from "../math";
-import {HexColor} from "../scenes/colors";
+import {HexColor} from "../colors";
 import {Circle, point, Point, Velocity} from "../physics";
 
 function many(n: number, f: (i: number) => any) {

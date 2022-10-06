@@ -26,3 +26,10 @@ export function sampleList<T>(a: T[]): T {
 export function sampleString(s: string): string {
     return sampleList(s.split(""))
 }
+
+export function shuffleList<T>(a: T[]): T[] {
+    return a
+        .map(value => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value)
+}

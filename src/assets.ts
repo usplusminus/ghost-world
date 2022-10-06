@@ -21,6 +21,22 @@ export default {
         lime : {
             key: "lime",
             filepath: "assets/images/lime.png"
-        }
+        },
+        chair1 : {
+            key: "chair1",
+            filepath: "assets/images/chair1.png"
+        },
+        chair2 : {
+            key: "chair2",
+            filepath: "assets/images/chair2.png"
+        },
+        chair3 : {
+            key: "chair3",
+            filepath: "assets/images/chair3.png"
+        },
+        chair4 : {
+            key: "chair4",
+            filepath: "assets/images/chair4.png"
+        },
     }
 }

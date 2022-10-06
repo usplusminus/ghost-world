@@ -6,7 +6,7 @@ import MirrorScene from "./scenes/MirrorScene";
 export const setupGame = (canvasElement: HTMLCanvasElement): Phaser.Game => {
     return new Phaser.Game(
         Object.assign(gameConfig(canvasElement), {
-            scene: [MirrorScene, MainScene]
+            scene: [MainScene, MirrorScene]
         })
     );
 }

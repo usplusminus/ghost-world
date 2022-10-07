@@ -49,9 +49,9 @@ export default class MainScene extends Phaser.Scene {
         this.interactableElements = [
             new Phaser.Math.Vector2(1500, -500),
             new Phaser.Math.Vector2(1300, -200)
-        ].map(position => new Interactable(this, position, 50.0, [this.spider]))
+        ].map(position => new Interactable(this, position, 50.0))
 
-        eventEmitter.once(Events.DINNER, () => woodSound.play({ loop: false }))
+        eventEmitter.once(Events.INTERACTABLE, () => woodSound.play({ loop: false }))
 
     }
 

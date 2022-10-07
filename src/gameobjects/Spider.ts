@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import {lerp, noise, random, randomInRange} from "../math";
 import {HexColor} from "../colors";
 import {point, Point, Velocity} from "../physics";
+import {eventEmitter, Events} from "../events";
 
 function many(n: number, f: (i: number) => any) {
     return [...Array(n)].map((_, i: number) => f(i));
@@ -97,6 +98,8 @@ export class Spider extends Phaser.GameObjects.Graphics {
 
         this.x += Math.min(innerWidth / 100, (fx - this.x) / 10)
         this.y += Math.min(innerWidth / 100, (fy - this.y) / 10)
+
+        eventEmitter.emit(Events.SPIDER_POSITION_UPDATED, this.x, this.y)
 
         this.draw()
     }

@@ -25,7 +25,8 @@ export class Spider extends Phaser.GameObjects.Graphics {
     private readonly horizontalAcceleration: number;
     private walkRadius: Point;
     private readonly bodyRadius: number;
-    private graphics: Phaser.GameObjects.Graphics;
+    lineGraphics: Phaser.GameObjects.Graphics;
+    pointGraphics: Phaser.GameObjects.Graphics;
     private cursors: Phaser.Types.Input.Keyboard.CursorKeys;
     private velocity: Velocity;
 
@@ -50,7 +51,11 @@ export class Spider extends Phaser.GameObjects.Graphics {
 
     create() {
         this.cursors = this.scene.input.keyboard.createCursorKeys();
-        this.graphics = this.scene.add.graphics({
+        this.lineGraphics = this.scene.add.graphics({
+            fillStyle: {color: HexColor.white},
+            lineStyle: {width: 0.5, color: HexColor.white, alpha: 1.0}
+        })
+        this.pointGraphics = this.scene.add.graphics({
             fillStyle: {color: HexColor.white},
             lineStyle: {width: 0.5, color: HexColor.white, alpha: 1.0}
         })
@@ -101,12 +106,12 @@ export class Spider extends Phaser.GameObjects.Graphics {
 
         eventEmitter.emit(Events.SPIDER_POSITION_UPDATED, this.x, this.y)
 
+        this.lineGraphics.clear()
+        this.pointGraphics.clear()
         this.draw()
     }
 
-    draw(){
-        this.graphics.clear()
-
+    draw(drawPoints = true){
         let i = 0
         this.circles.forEach((circle) => {
             const distanceFromCircleToSpider = Phaser.Math.Distance.Between(circle.x, circle.y, this.x, this.y);
@@ -117,42 +122,38 @@ export class Spider extends Phaser.GameObjects.Graphics {
                 ? circle.radius = newCircleRadius * 1.5
                 : circle.radius = newCircleRadius;
             circle.len = Math.max(0, Math.min(circle.len + direction, 1));
-            this.paintCircle(circle)
+            if (circle.len > 0){
+                this.points.forEach((point) => {
+                    this.drawLine(
+                        lerp(this.x + point.x * this.bodyRadius, circle.x, circle.len * circle.len),
+                        lerp(this.y + point.y * this.bodyRadius, circle.y, circle.len * circle.len),
+                        this.x + point.x * this.bodyRadius,
+                        this.y + point.y * this.bodyRadius
+                    );
+                });
+            }
+            if (drawPoints && circle.radius > 0.5)
+                this.drawCircle(circle);
         })
     }
 
-    private paintCircle(circle: SpiderAnchors) {
-        if (circle.len > 0){
-            this.points.forEach((point) => {
-                this.drawLine(
-                    lerp(this.x + point.x * this.bodyRadius, circle.x, circle.len * circle.len),
-                    lerp(this.y + point.y * this.bodyRadius, circle.y, circle.len * circle.len),
-                    this.x + point.x * this.bodyRadius,
-                    this.y + point.y * this.bodyRadius
-                );
-            });
-        }
-        if (circle.radius > 0.5)
-            this.drawCircle(circle);
-    }
-
     private drawCircle(circle: SpiderAnchors) {
-        this.graphics.fillCircle(circle.x, circle.y, circle.radius)
+        this.pointGraphics.fillCircle(circle.x, circle.y, circle.radius)
     }
 
     private drawLine(x0: number, y0: number, x1: number, y1: number) {
-        this.graphics.beginPath()
-        this.graphics.moveTo(x0, y0)
+        this.lineGraphics.beginPath()
+        this.lineGraphics.moveTo(x0, y0)
         const n = 100;
         many(n, (i) => {
             i = (i + 1) / n;
             const x = lerp(x0, x1, i);
             const y = lerp(y0, y1, i);
             const k = noise(x / 5 + x0, y / 5 + y0) * 2;
-            this.graphics.lineTo(x + k, y + k);
+            this.lineGraphics.lineTo(x + k, y + k);
         });
-        this.graphics.closePath()
-        this.graphics.stroke()
+        this.lineGraphics.closePath()
+        this.lineGraphics.stroke()
     }
 
     private getUserInputs() {

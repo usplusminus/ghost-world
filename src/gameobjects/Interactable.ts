@@ -22,10 +22,10 @@ export default class Interactable extends Phaser.GameObjects.Graphics {
             lineStyle: {width: 0.5, color: HexColor.white, alpha: 1.0}
         })
         this.observableObjects = observableObjects
+        this.graphics.fillCircle(this.position.x, this.position.y, this.radius)
     }
 
     update(){
-        this.graphics.fillCircle(this.position.x, this.position.y, this.radius)
         this.observableObjects.forEach(graphics => {
             if (this.position.distance({ x : graphics.x, y: graphics.y }) < this.radius)
                 this.broadcastInteraction(graphics)

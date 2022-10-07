@@ -7,12 +7,6 @@ export type Point = {
     y: number,
 }
 
-export type Circle = {
-    x: number,
-    y: number,
-    len: number,
-    radius: number,
-}
 
 export type Velocity = {
     horizontal: number,

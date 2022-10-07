@@ -1,14 +1,21 @@
 import Phaser from "phaser";
 import {lerp, noise, random, randomInRange} from "../math";
 import {HexColor} from "../colors";
-import {Circle, point, Point, Velocity} from "../physics";
+import {point, Point, Velocity} from "../physics";
 
 function many(n: number, f: (i: number) => any) {
     return [...Array(n)].map((_, i: number) => f(i));
 }
 
+export type SpiderAnchors = {
+    x: number,
+    y: number,
+    len: number,
+    radius: number,
+}
+
 export class Spider extends Phaser.GameObjects.Graphics {
-    private circles: Circle[];
+    private circles: SpiderAnchors[];
     private points: Point[];
     private readonly seed: number;
     private targetX: number;
@@ -22,9 +29,25 @@ export class Spider extends Phaser.GameObjects.Graphics {
     private velocity: Velocity;
 
     SPIDER_SPEED = 10;
+    MAX_RADIUS = 2;
+    NUMBER_OF_LEGS = 9;
 
     constructor(scene: Phaser.Scene) {
         super(scene);
+        this.create()
+        const maxRadius = 150
+        this.seed = random(100) // Can be used to differentiate movement patterns if there are multiple spiders
+        this.x = 0
+        this.y = 0
+        this.targetX = this.x
+        this.targetY = this.y
+        this.verticalAcceleration = random(0.5, 0.5)
+        this.horizontalAcceleration = random(0.5, 0.5)
+        this.walkRadius = point(random(maxRadius, maxRadius), random(maxRadius, maxRadius))
+        this.bodyRadius = 2
+    }
+
+    create() {
         this.cursors = this.scene.input.keyboard.createCursorKeys();
         this.graphics = this.scene.add.graphics({
             fillStyle: {color: HexColor.white},
@@ -48,40 +71,18 @@ export class Spider extends Phaser.GameObjects.Graphics {
         //     .map(circle => ({...circle, radius : 2 }))
         //     .forEach(circle => debugGraphics.fillCircle(circle.x, circle.y, circle.radius))
 
-        this.points = many(9, (idx) => point(
-            Math.cos((idx / 9) * Math.PI * 2),
-            Math.sin((idx / 9) * Math.PI * 2)
+        this.points = many(this.NUMBER_OF_LEGS, (idx) => point(
+            Math.cos((idx / this.NUMBER_OF_LEGS) * Math.PI * 2),
+            Math.sin((idx / this.NUMBER_OF_LEGS) * Math.PI * 2)
         ))
 
-        const maxRadius = 150
-        this.seed = random(100) // Can be used to differentiate movement patterns if there are multiple spiders
-        this.x = 0
-        this.y = 0
-        this.targetX = this.x
-        this.targetY = this.y
-        this.verticalAcceleration = random(0.5, 0.5)
-        this.horizontalAcceleration = random(0.5, 0.5)
-        this.walkRadius = point(random(maxRadius, maxRadius), random(maxRadius, maxRadius))
-        this.bodyRadius = 2
+
     }
 
     update(time: number, _delta: number) {
         this.tick(time / 1000)
     }
 
-    paintCircle(circle: Circle) {
-        if (circle.len > 0){
-            this.points.forEach((point) => {
-                this.drawLine(
-                    lerp(this.x + point.x * this.bodyRadius, circle.x, circle.len * circle.len),
-                    lerp(this.y + point.y * this.bodyRadius, circle.y, circle.len * circle.len),
-                    this.x + point.x * this.bodyRadius,
-                    this.y + point.y * this.bodyRadius
-                );
-            });
-        }
-        this.drawCircle(circle);
-    }
 
     tick(time: number) {
         this.getUserInputs()
@@ -105,21 +106,34 @@ export class Spider extends Phaser.GameObjects.Graphics {
 
         let i = 0
         this.circles.forEach((circle) => {
-            const distanceFromCircleToSpider = Math.hypot(circle.x - this.x, circle.y - this.y);
-            let newCircleRadius = Math.min(2, innerWidth / distanceFromCircleToSpider / 5);
-            const isIncreasing = distanceFromCircleToSpider < innerWidth / 10
-                && (i++) < 8;
+            const distanceFromCircleToSpider = Phaser.Math.Distance.Between(circle.x, circle.y, this.x, this.y);
+            const newCircleRadius = Math.min(this.MAX_RADIUS, innerWidth / distanceFromCircleToSpider / 5);
+            const isIncreasing = distanceFromCircleToSpider < innerWidth / 10 && (i++) < (this.NUMBER_OF_LEGS - 1);
             const direction = isIncreasing ? 0.1 : -0.1;
-            if (isIncreasing) {
-                newCircleRadius *= 1.5;
-            }
-            circle.radius = newCircleRadius;
+            isIncreasing
+                ? circle.radius = newCircleRadius * 1.5
+                : circle.radius = newCircleRadius;
             circle.len = Math.max(0, Math.min(circle.len + direction, 1));
             this.paintCircle(circle)
-        });
+        })
     }
 
-    private drawCircle(circle: Circle) {
+    private paintCircle(circle: SpiderAnchors) {
+        if (circle.len > 0){
+            this.points.forEach((point) => {
+                this.drawLine(
+                    lerp(this.x + point.x * this.bodyRadius, circle.x, circle.len * circle.len),
+                    lerp(this.y + point.y * this.bodyRadius, circle.y, circle.len * circle.len),
+                    this.x + point.x * this.bodyRadius,
+                    this.y + point.y * this.bodyRadius
+                );
+            });
+        }
+        if (circle.radius > 0.5)
+            this.drawCircle(circle);
+    }
+
+    private drawCircle(circle: SpiderAnchors) {
         this.graphics.fillCircle(circle.x, circle.y, circle.radius)
     }
 

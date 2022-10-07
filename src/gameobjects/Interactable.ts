@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import {HexColor} from "../colors";
-import {eventEmitter, Events} from "../events";
+import {eventEmitter, GameEvent, triggerEvent} from "../events";
 
 export default class Interactable extends Phaser.GameObjects.Graphics {
     private readonly graphics: Phaser.GameObjects.Graphics;
@@ -21,13 +21,14 @@ export default class Interactable extends Phaser.GameObjects.Graphics {
         })
         this.graphics.fillCircle(this.position.x, this.position.y, this.radius)
 
-        eventEmitter.on(Events.SPIDER_POSITION_UPDATED, (x: number, y: number) => {
+        eventEmitter.on(GameEvent.SPIDER_POSITION_UPDATED, (x: number, y: number) => {
             if (this.position.distance({ x, y }) < this.radius)
                 this.broadcastInteraction()
         })
     }
 
     broadcastInteraction() {
-        eventEmitter.emit(Events.INTERACTABLE)
+        triggerEvent(GameEvent.INTERACTABLE)
+        eventEmitter.emit(GameEvent.INTERACTABLE)
     }
 }

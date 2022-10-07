@@ -3,7 +3,7 @@ import assets from "../assets";
 import {Spider} from "../gameobjects/Spider";
 import {semanticColors} from "../colors";
 import Interactable from "../gameobjects/Interactable";
-import {eventEmitter, Events} from "../events";
+import {eventEmitter, GameEvent} from "../events";
 import {shuffleList} from "../math";
 
 export const MAIN_SCENE = "MainScene"
@@ -51,7 +51,7 @@ export default class MainScene extends Phaser.Scene {
             new Phaser.Math.Vector2(1300, -200)
         ].map(position => new Interactable(this, position, 50.0))
 
-        eventEmitter.once(Events.INTERACTABLE, () => woodSound.play({ loop: false }))
+        eventEmitter.once(GameEvent.INTERACTABLE, () => woodSound.play({ loop: false }))
 
     }
 

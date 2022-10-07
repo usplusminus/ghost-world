@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import {Spider} from "../gameobjects/Spider";
 import {HexColor} from "../colors";
+import {LOCAL_STORAGE_EVENT} from "../events";
 
 export const MIRROR_SCENE = "MirrorScene"
 
@@ -34,6 +35,11 @@ export default class MirrorScene extends Phaser.Scene {
             lineStyle: {width: 3.0, color: HexColor.white, alpha: 1.0}
         })
         this.mirrorGraphics.strokeRectShape(this.mirrorFrame)
+
+        addEventListener(LOCAL_STORAGE_EVENT, (e: StorageEvent) => {
+            console.log("MirrorScene logging the storage")
+            console.log(e)
+        })
     }
 
     update(time: number, _delta: number) {

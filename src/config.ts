@@ -18,6 +18,12 @@ export const gameConfig = (canvasElement: HTMLCanvasElement): Phaser.Types.Core.
                 gravity: { x: 0, y: 0 },
                 debug: false
             }
-        }
+        },
+        // fps: {
+        //     forceSetTimeOut: true,
+        //     // panicMax: 0,
+        //     // smoothStep: false,
+        //     target: 30
+        // },
     }
 }

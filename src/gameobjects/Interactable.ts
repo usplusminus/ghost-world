@@ -15,6 +15,7 @@ export default class Interactable extends Phaser.GameObjects.Graphics {
     private readonly position: Phaser.Math.Vector2;
     private readonly radius: number;
     private lastInteraction: number;
+    private spiderHasBeenOutsideOfRadiusSinceLastInteraction: boolean;
 
     constructor(
         scene: Phaser.Scene,
@@ -29,11 +30,15 @@ export default class Interactable extends Phaser.GameObjects.Graphics {
             lineStyle: {width: 0.5, color: HexColor.white, alpha: 1.0}
         })
         this.graphics.fillCircle(this.position.x, this.position.y, this.radius)
-        const requiredIntervalMs = 1000
-        this.lastInteraction = Date.now() - requiredIntervalMs // manually set it back
+        const requiredIntervalMs = 500
+        this.lastInteraction = Date.now() - requiredIntervalMs
 
         eventEmitter.on(GameEvent.SPIDER_POSITION_UPDATED, (x: number, y: number) => {
-            if (!(this.position.distance({ x, y }) < this.radius)) return
+            if (!(this.position.distance({ x, y }) < this.radius)){
+                this.spiderHasBeenOutsideOfRadiusSinceLastInteraction = true
+                return
+            }
+            if (!this.spiderHasBeenOutsideOfRadiusSinceLastInteraction) return
             if (Date.now() - this.lastInteraction < requiredIntervalMs) return
             this.broadcastInteraction()
         })
@@ -41,6 +46,7 @@ export default class Interactable extends Phaser.GameObjects.Graphics {
 
     broadcastInteraction() {
         this.lastInteraction = Date.now()
+        this.spiderHasBeenOutsideOfRadiusSinceLastInteraction = false
         sendTextToScreen1(sampleList(texts))
     }
 }

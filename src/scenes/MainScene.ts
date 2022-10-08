@@ -48,11 +48,9 @@ export default class MainScene extends Phaser.Scene {
         this.backgroundSound.play({loop: true})
         const notificationSound = this.sound.add(assets.sounds.notification.key) as Phaser.Sound.WebAudioSound
 
-
         this.interactableElements = [
-            new Phaser.Math.Vector2(1500, -500),
-            new Phaser.Math.Vector2(1300, -200)
-        ].map(position => new Interactable(this, position, 50.0))
+            new Interactable(this, new Phaser.Math.Vector2(1300, -200), 50.0)
+        ]
 
         eventEmitter.on(GameEvent.SCREEN1_UPDATE, () => notificationSound.play({ loop: false }))
 

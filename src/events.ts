@@ -15,7 +15,7 @@ export const triggerEvent = (event: GameEvent) => {
     localStorage.setItem(triggerKey, event)
 }
 
-
+export const screen1StorageKey = "screen1"
 export const sendTextToScreen1 = (text: string) => {
-    localStorage.setItem("screen1", text)
+    localStorage.setItem(screen1StorageKey, text)
 }

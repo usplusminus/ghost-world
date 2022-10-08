@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import {LOCAL_STORAGE_EVENT} from "../events";
+import {LOCAL_STORAGE_EVENT, screen1StorageKey} from "../events";
 
 export const SCREEN1_SCENE = "Screen1Scene"
 
@@ -28,12 +28,11 @@ export default class Screen1Scene extends Phaser.Scene {
         this.cameras.main.centerOn(this.text.x, this.text.y);
 
         addEventListener(LOCAL_STORAGE_EVENT, (storageEvent: StorageEvent) => {
+            if (storageEvent.key !== screen1StorageKey) return
             if (storageEvent.newValue){
                 this.text.setText(storageEvent.newValue)
             }
-            if (storageEvent.key) {
-                localStorage.removeItem(storageEvent.key)
-            }
+            localStorage.removeItem(storageEvent.key)
         })
     }
 }

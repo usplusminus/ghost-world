@@ -14,6 +14,7 @@ export default class Screen1Scene extends Phaser.Scene {
 
     create() {
         this.cameras.main.setZoom(0.5);
+        this.cameras.main.centerOn(0, 0);
         if (this.isInDebugMode){
             this.add.text(- innerWidth + 100, - innerHeight + 100, "Screen 1", {
                 fontSize: "128px",
@@ -21,12 +22,19 @@ export default class Screen1Scene extends Phaser.Scene {
             })
         }
         // TODO: center align text based on how long it is and its font size
-        this.text = this.add.text(0, 0, "This is screen 1", {
-            fontSize: "128px",
-            fontFamily: "Times New Roman",
-        })
-        this.cameras.main.centerOn(this.text.x, this.text.y);
-
+        const defaultText = this.isInDebugMode
+            ? "This is screen 1 with lorem ipsum text l l l l l l l l l orem ipsum textlorem ipsum textlorem ipsum textlorem ipsum textlorem ipsum textlorem ipsum text"
+            : "..."
+        this.text = this.add.text(-innerWidth / 2, -innerHeight / 2,
+            defaultText,
+            {
+                fontSize: "128px",
+                fontFamily: "Times New Roman",
+                wordWrap: {
+                    width: 3 * innerWidth / 3
+                }
+            }
+        )
         addEventListener(LOCAL_STORAGE_EVENT, (storageEvent: StorageEvent) => {
             if (storageEvent.key !== screen1StorageKey) return
             if (storageEvent.newValue){

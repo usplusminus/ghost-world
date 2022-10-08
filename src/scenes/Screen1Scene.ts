@@ -1,15 +1,22 @@
 import Phaser from 'phaser';
 import {LOCAL_STORAGE_EVENT, screen1StorageKey} from "../events";
+import assets from "../assets";
 
 export const SCREEN1_SCENE = "Screen1Scene"
 
 export default class Screen1Scene extends Phaser.Scene {
     private text: Phaser.GameObjects.Text;
     private readonly isInDebugMode: boolean;
+    private notificationSound: Phaser.Sound.WebAudioSound;
+
 
     constructor(debugMode = false) {
         super(SCREEN1_SCENE);
         this.isInDebugMode = debugMode;
+    }
+
+    preload() {
+        this.load.audio(assets.sounds.notification.key, assets.sounds.notification.filepath);
     }
 
     create() {
@@ -35,10 +42,13 @@ export default class Screen1Scene extends Phaser.Scene {
                 }
             }
         )
+        this.notificationSound = this.sound.add(assets.sounds.notification.key) as Phaser.Sound.WebAudioSound
+
         addEventListener(LOCAL_STORAGE_EVENT, (storageEvent: StorageEvent) => {
             if (storageEvent.key !== screen1StorageKey) return
             if (storageEvent.newValue){
                 this.text.setText(storageEvent.newValue)
+                this.notificationSound.play()
             }
             localStorage.removeItem(storageEvent.key)
         })

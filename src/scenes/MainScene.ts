@@ -34,7 +34,7 @@ export default class MainScene extends Phaser.Scene {
         this.load.image(assets.images.chair3.key, assets.images.chair3.filepath);
         this.load.image(assets.images.chair4.key, assets.images.chair4.filepath);
         this.load.audio(assets.sounds.background.key, assets.sounds.background.filepath);
-        this.load.audio(assets.sounds.wood.key, assets.sounds.wood.filepath);
+        this.load.audio(assets.sounds.notification.key, assets.sounds.notification.filepath);
     }
 
     create() {
@@ -46,7 +46,7 @@ export default class MainScene extends Phaser.Scene {
         this.setupTextPaths()
         this.backgroundSound = this.sound.add(assets.sounds.background.key) as Phaser.Sound.WebAudioSound
         this.backgroundSound.play({loop: true})
-        const woodSound = this.sound.add(assets.sounds.wood.key) as Phaser.Sound.WebAudioSound
+        const notificationSound = this.sound.add(assets.sounds.notification.key) as Phaser.Sound.WebAudioSound
 
 
         this.interactableElements = [
@@ -54,7 +54,7 @@ export default class MainScene extends Phaser.Scene {
             new Phaser.Math.Vector2(1300, -200)
         ].map(position => new Interactable(this, position, 50.0))
 
-        eventEmitter.once(GameEvent.INTERACTABLE, () => woodSound.play({ loop: false }))
+        eventEmitter.on(GameEvent.SCREEN1_UPDATE, () => notificationSound.play({ loop: false }))
 
     }
 

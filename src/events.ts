@@ -5,17 +5,13 @@ export const eventEmitter = new Phaser.Events.EventEmitter();
 export const LOCAL_STORAGE_EVENT = "storage"
 
 export enum GameEvent {
-    INTERACTABLE = "interactable",
+    SCREEN1_UPDATE = "screen1Update",
     SPIDER_POSITION_UPDATED = "spider-position-updated",
 }
 
 
-const triggerKey = "trigger"
-export const triggerEvent = (event: GameEvent) => {
-    localStorage.setItem(triggerKey, event)
-}
-
 export const screen1StorageKey = "screen1"
 export const sendTextToScreen1 = (text: string) => {
     localStorage.setItem(screen1StorageKey, text)
+    eventEmitter.emit(GameEvent.SCREEN1_UPDATE)
 }

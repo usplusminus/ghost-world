@@ -8,6 +8,10 @@ export default {
             key: "wood",
             filepath: "assets/sounds/inumaki_esuzaki001.mp3"
         },
+        notification: {
+            key: "notification-polite",
+            filepath: "assets/sounds/notification_polite.wav"
+        }
     },
     images : {
         food : {

@@ -1,5 +1,4 @@
 import Phaser from 'phaser';
-import {LOCAL_STORAGE_EVENT} from "../events";
 
 export const SCREEN2_SCENE = "Screen1Scene"
 
@@ -20,14 +19,5 @@ export default class Screen2Scene extends Phaser.Scene {
                 fontFamily: "Times New Roman"
             })
         }
-
-        addEventListener(LOCAL_STORAGE_EVENT, (storageEvent: StorageEvent) => {
-            if (storageEvent.newValue){
-                this.text.setText(storageEvent.newValue)
-            }
-            if (storageEvent.key) {
-                localStorage.removeItem(storageEvent.key)
-            }
-        })
     }
 }

@@ -1,6 +1,14 @@
 import Phaser from "phaser";
 import {HexColor} from "../colors";
-import {eventEmitter, GameEvent, triggerEvent} from "../events";
+import {eventEmitter, GameEvent, triggerEvent, sendTextToScreen1} from "../events";
+import {sampleList} from "../math";
+
+const texts = [
+    "I've always wanted to start a choir with my friends",
+    "ABC",
+    "CDF",
+    "JHKJHKJ"
+]
 
 export default class Interactable extends Phaser.GameObjects.Graphics {
     private readonly graphics: Phaser.GameObjects.Graphics;
@@ -29,6 +37,7 @@ export default class Interactable extends Phaser.GameObjects.Graphics {
 
     broadcastInteraction() {
         triggerEvent(GameEvent.INTERACTABLE)
+        sendTextToScreen1(sampleList(texts))
         eventEmitter.emit(GameEvent.INTERACTABLE)
     }
 }

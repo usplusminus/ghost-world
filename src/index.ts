@@ -2,7 +2,7 @@ import './style.css'
 import Phaser from "phaser";
 import {gameConfig} from "./config";
 import MainScene from "./scenes/MainScene";
-import MirrorScene from "./scenes/MirrorScene";
+import Screen1Scene from "./scenes/Sceen1Scene";
 
 function playScene(scene: Phaser.Scene, canvasElement: HTMLCanvasElement): Phaser.Game {
     return new Phaser.Game(
@@ -22,8 +22,8 @@ function main(){
     const sceneName = window.location.pathname.substring(1) // avoid '/'
 
     switch(sceneName.toLowerCase()) {
-        case "mirror":
-            playScene(new MirrorScene(), canvasElement)
+        case "screen1":
+            playScene(new Screen1Scene(), canvasElement)
             break;
         default:
             playScene(new MainScene(), canvasElement)

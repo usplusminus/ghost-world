@@ -17,9 +17,12 @@ export default class MainScene extends Phaser.Scene {
     private dinnerAssetsGroup: Phaser.GameObjects.Group;
     private backgroundSound: Phaser.Sound.WebAudioSound;
     private interactableElements: Interactable[];
+    private readonly isInDebugMode: boolean
 
-    constructor() {
+    constructor(debugMode = false) {
         super(MAIN_SCENE);
+        this.isInDebugMode = debugMode
+
     }
 
     preload() {

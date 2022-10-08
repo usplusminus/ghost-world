@@ -5,17 +5,21 @@ export const SCREEN2_SCENE = "Screen1Scene"
 
 export default class Screen2Scene extends Phaser.Scene {
     private text: Phaser.GameObjects.Text;
+    private readonly isInDebugMode: boolean;
 
-    constructor() {
+    constructor(debugMode = false) {
         super(SCREEN2_SCENE);
+        this.isInDebugMode = debugMode
     }
 
     create() {
         this.cameras.main.setZoom(0.5);
-        this.add.text(- innerWidth + 100, - innerHeight + 100, "Screen 2", {
-            fontSize: "128px",
-            fontFamily: "Times New Roman"
-        })
+        if (this.isInDebugMode){
+            this.add.text(- innerWidth + 100, - innerHeight + 100, "Screen 2", {
+                fontSize: "128px",
+                fontFamily: "Times New Roman"
+            })
+        }
         this.text = this.add.text(0, 0, "Dynamic content", {
             fontSize: "128px",
             fontFamily: "Times New Roman"

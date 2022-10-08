@@ -22,20 +22,22 @@ function main(){
     appRoot.appendChild(canvasElement)
 
 
-    const sceneName = new URL(window.location.href).searchParams.get("display") ?? "main"
+    const url = new URL(window.location.href)
+    const sceneName = url.searchParams.get("display") ?? "main"
+    const debugMode = url.searchParams.get("debug") == "true"
 
     switch(sceneName.toLowerCase()) {
         case "main":
             playScene(new MainScene(), canvasElement)
             break;
         case "screen1":
-            playScene(new Screen1Scene(), canvasElement)
+            playScene(new Screen1Scene(debugMode), canvasElement)
             break;
         case "screen2":
-            playScene(new Screen2Scene(), canvasElement)
+            playScene(new Screen2Scene(debugMode), canvasElement)
             break;
         default:
-            playScene(new MainScene(), canvasElement)
+            playScene(new MainScene(debugMode), canvasElement)
             break;
     }
 }

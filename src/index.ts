@@ -2,8 +2,8 @@ import './style.css'
 import Phaser from "phaser";
 import {gameConfig} from "./config";
 import MainScene from "./scenes/MainScene";
-import Screen1Scene from "./scenes/Sceen1Scene";
-import Screen2Scene from "./scenes/Sceen2Scene";
+import Screen1Scene from "./scenes/Screen1Scene";
+import Screen2Scene from "./scenes/Screen2Scene";
 
 function playScene(scene: Phaser.Scene, canvasElement: HTMLCanvasElement): Phaser.Game {
     return new Phaser.Game(

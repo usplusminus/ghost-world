@@ -22,7 +22,7 @@ export default class MainScene extends Phaser.Scene {
     constructor(debugMode = false) {
         super(MAIN_SCENE);
         this.isInDebugMode = debugMode
-
+        if (this.isInDebugMode) console.log("DEBUG")
     }
 
     preload() {

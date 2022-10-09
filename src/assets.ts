@@ -1,46 +1,27 @@
+type Asset = {
+    key: string,
+    filepath: string
+}
+
+function asset(filepath: string): Asset {
+    return { key: filepath, filepath: filepath }
+}
+
 export default {
-    sounds : {
-        background: {
-            key: "background",
-            filepath: "assets/sounds/194166__klankbeeld__piezo-shipquay-130708-09_compressed.mp3"
-        },
-        wood: {
-            key: "wood",
-            filepath: "assets/sounds/inumaki_esuzaki001.mp3"
-        },
-        notification: {
-            key: "notification-polite",
-            filepath: "assets/sounds/notification_polite.wav"
-        }
+    sounds: {
+        background: asset("assets/sounds/194166__klankbeeld__piezo-shipquay-130708-09_compressed.mp3"),
+        wood: asset("assets/sounds/inumaki_esuzaki001.mp3"),
+        notification: asset("assets/sounds/notification_polite.wav"),
     },
-    images : {
-        food : {
-            key: "food",
-            filepath: "assets/images/food.png"
-        },
-        lemon : {
-            key: "lemon",
-            filepath: "assets/images/lemon.png"
-        },
-        lime : {
-            key: "lime",
-            filepath: "assets/images/lime.png"
-        },
-        chair1 : {
-            key: "chair1",
-            filepath: "assets/images/chair1.png"
-        },
-        chair2 : {
-            key: "chair2",
-            filepath: "assets/images/chair2.png"
-        },
-        chair3 : {
-            key: "chair3",
-            filepath: "assets/images/chair3.png"
-        },
-        chair4 : {
-            key: "chair4",
-            filepath: "assets/images/chair4.png"
-        },
+    images: {
+        food: asset("assets/images/food.png"),
+        lemon: asset("assets/images/lemon.png"),
+        lime: asset("assets/images/lime.png"),
+        chairs: [
+            asset("assets/images/chair1.png"),
+            asset("assets/images/chair2.png"),
+            asset("assets/images/chair3.png"),
+            asset("assets/images/chair4.png"),
+        ]
     }
 }

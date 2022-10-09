@@ -4,7 +4,6 @@ import {Spider} from "../gameobjects/Spider";
 import {semanticColors} from "../colors";
 import Interactable from "../gameobjects/Interactable";
 import {eventEmitter, GameEvent} from "../events";
-import {shuffleList} from "../math";
 
 export const MAIN_SCENE = "MainScene"
 
@@ -27,10 +26,6 @@ export default class MainScene extends Phaser.Scene {
         this.load.image(assets.images.food.key, assets.images.food.filepath);
         this.load.image(assets.images.lemon.key, assets.images.lemon.filepath);
         this.load.image(assets.images.lime.key, assets.images.lime.filepath);
-        this.load.image(assets.images.chair1.key, assets.images.chair1.filepath);
-        this.load.image(assets.images.chair2.key, assets.images.chair2.filepath);
-        this.load.image(assets.images.chair3.key, assets.images.chair3.filepath);
-        this.load.image(assets.images.chair4.key, assets.images.chair4.filepath);
         this.load.audio(assets.sounds.background.key, assets.sounds.background.filepath);
         this.load.audio(assets.sounds.notification.key, assets.sounds.notification.filepath);
     }
@@ -62,13 +57,6 @@ export default class MainScene extends Phaser.Scene {
             new Phaser.Math.Vector2(-2200, -2000),
         ]
 
-        const chairAssets = shuffleList([
-            assets.images.chair1.key,
-            assets.images.chair2.key,
-            assets.images.chair3.key,
-            assets.images.chair4.key
-        ].flatMap(k => [k, k, k]))
-
         const textPathStyle = {fontSize: '32px', color: semanticColors.primary, fontFamily: "Times New Roman"}
         const dinnerText = "I arrive at yours quarter past seven. You make me dinner, we talk about life and everything else. We say it’s funny how we haven’t met in so long. We catch up on lost time like old friends. We say let’s do this again before too much time has passed, knowing we won’t. I leave when it gets too late in the evening"
         const dinnerTextChunks = dinnerText.split(/[\s,.]/)
@@ -79,15 +67,6 @@ export default class MainScene extends Phaser.Scene {
                 this.add.text(point.x, point.y, dinnerTextChunks.at(idx) ?? "", textPathStyle)
                 this.add.text(point.x, point.y, " ", textPathStyle)
             })
-        dinnerPath
-            .getSpacedPoints(chairAssets.length)
-            .forEach((point, idx) =>
-                this.add.image(
-                    point.x + 200,
-                    point.y,
-                    chairAssets[idx]
-                ).setScale(0.5, 0.5)
-            )
 
         const imagePosition = dinnerPathPoints.at(-1)!
         this.limeImage = this.add.image(

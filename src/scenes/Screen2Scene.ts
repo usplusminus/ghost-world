@@ -7,7 +7,8 @@ export const SCREEN2_SCENE = "Screen1Scene"
 
 export default class Screen2Scene extends Phaser.Scene {
     private readonly isInDebugMode: boolean;
-    private dinnerImage: Phaser.GameObjects.Image | null;
+    private dinnerImages: Phaser.GameObjects.Image[] | null;
+    private chairPositions: Phaser.Math.Vector2[];
 
     constructor(debugMode = false) {
         super(SCREEN2_SCENE);
@@ -27,7 +28,13 @@ export default class Screen2Scene extends Phaser.Scene {
                 fontFamily: "Times New Roman"
             })
         }
-        this.dinnerImage = null;
+        this.chairPositions = [
+            new Phaser.Math.Vector2(- innerWidth / 2, - innerHeight / 2),
+            new Phaser.Math.Vector2(innerWidth / 2, - innerHeight / 2),
+            new Phaser.Math.Vector2(- innerWidth / 2, innerHeight / 2),
+            new Phaser.Math.Vector2(innerWidth / 2, innerHeight / 2),
+        ]
+        this.dinnerImages = null;
         addEventListener(LOCAL_STORAGE_EVENT, (storageEvent: StorageEvent) => {
             if (storageEvent.key !== screen2StorageKey) return
             if (storageEvent.newValue == null) return
@@ -38,8 +45,10 @@ export default class Screen2Scene extends Phaser.Scene {
     }
 
     updateDinnerScene(){
-        this.dinnerImage == null
-            ? this.dinnerImage = this.add.image(0, 0, sampleList(assets.images.chairs).key)
-            : this.dinnerImage.setTexture(sampleList(assets.images.chairs).key)
+        this.dinnerImages == null
+            ? this.dinnerImages = this.chairPositions.map(position =>
+                this.add.image(position.x, position.y, sampleList(assets.images.chairs).key)
+            )
+            : this.dinnerImages.map(image => image.setTexture(sampleList(assets.images.chairs).key))
     }
 }

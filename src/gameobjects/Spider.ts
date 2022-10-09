@@ -3,6 +3,7 @@ import {lerp, noise, random, randomInRange} from "../math";
 import {HexColor} from "../colors";
 import {point, Point, Velocity} from "../physics";
 import {eventEmitter, GameEvent} from "../events";
+import {getGameHeight, getGameWidth} from "../config";
 
 function many(n: number, f: (i: number) => any) {
     return [...Array(n)].map((_, i: number) => f(i));
@@ -65,8 +66,8 @@ export class Spider extends Phaser.GameObjects.Graphics {
         // TODO: we don't need to render more points than necessary for surrounding the spider
         this.circles = many(2000, () => {
             return {
-                x: randomInRange(-innerWidth * 2, innerWidth * 2),
-                y: randomInRange(-innerHeight * 2, innerHeight * 2),
+                x: randomInRange(- getGameWidth(),  getGameWidth()),
+                y: randomInRange(- getGameHeight(), getGameHeight()),
                 len: 0,
                 radius: 0,
             };

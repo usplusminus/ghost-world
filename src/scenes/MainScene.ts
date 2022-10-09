@@ -1,9 +1,10 @@
 import Phaser from 'phaser';
 import assets from "../assets";
 import {Spider} from "../gameobjects/Spider";
-import {semanticColors} from "../colors";
+import {HexColor, semanticColors} from "../colors";
 import Interactable from "../gameobjects/Interactable";
 import {eventEmitter, GameEvent} from "../events";
+import {getGameHeight, getGameWidth} from "../config";
 
 export const MAIN_SCENE = "MainScene"
 
@@ -31,7 +32,19 @@ export default class MainScene extends Phaser.Scene {
     }
 
     create() {
-        if (this.isInDebugMode) console.log("Debugging")
+        if (this.isInDebugMode) {
+            const sceneFrame = new Phaser.Geom.Rectangle(
+                -getGameWidth(),
+                -getGameHeight(),
+                getGameWidth() * 2,
+                getGameHeight() * 2
+            )
+            const graphics = this.add.graphics({
+                fillStyle: {color: HexColor.white},
+                lineStyle: {width: 0.5, color: HexColor.white, alpha: 1.0}
+            })
+            graphics.strokeRectShape(sceneFrame)
+        }
         this.cameras.main.setZoom(0.5);
         this.spider = new Spider(this)
         this.cameras.main.centerOn(this.spider.x, this.spider.y);

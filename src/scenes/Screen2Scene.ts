@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import {LOCAL_STORAGE_EVENT, SceneTrigger, screen2StorageKey} from "../events";
 import assets from "../assets";
+import {sampleList} from "../math";
 
 export const SCREEN2_SCENE = "Screen1Scene"
 
@@ -14,8 +15,7 @@ export default class Screen2Scene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image(assets.images.chair1.key, assets.images.chair1.filepath);
-        this.load.image(assets.images.chair2.key, assets.images.chair2.filepath);
+        assets.images.chairs.map(chairAsset => this.load.image(chairAsset.key, chairAsset.filepath))
     }
 
     create() {
@@ -39,7 +39,7 @@ export default class Screen2Scene extends Phaser.Scene {
 
     updateDinnerScene(){
         this.dinnerImage == null
-            ? this.dinnerImage = this.add.image(0, 0, assets.images.chair1.key)
-            : this.dinnerImage.setTexture(assets.images.chair2.key)
+            ? this.dinnerImage = this.add.image(0, 0, sampleList(assets.images.chairs).key)
+            : this.dinnerImage.setTexture(sampleList(assets.images.chairs).key)
     }
 }

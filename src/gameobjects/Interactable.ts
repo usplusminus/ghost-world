@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import {HexColor} from "../colors";
-import {eventEmitter, GameEvent, sendTextToScreen1} from "../events";
+import {eventEmitter, GameEvent, SceneTrigger, sendTextToScreen1, sendTriggerToScreen2} from "../events";
 import {sampleList} from "../math";
 
 const texts = [
@@ -48,5 +48,6 @@ export default class Interactable extends Phaser.GameObjects.Graphics {
         this.lastInteraction = Date.now()
         this.spiderHasBeenOutsideOfRadiusSinceLastInteraction = false
         sendTextToScreen1(sampleList(texts))
+        sendTriggerToScreen2(SceneTrigger.DINNER_SCENE)
     }
 }

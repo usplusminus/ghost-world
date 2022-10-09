@@ -16,13 +16,11 @@ export default class MainScene extends Phaser.Scene {
     private limeImage: Phaser.GameObjects.Image;
     private dinnerAssetsGroup: Phaser.GameObjects.Group;
     private backgroundSound: Phaser.Sound.WebAudioSound;
-    private interactableElements: Interactable[];
-    private readonly isInDebugMode: boolean
+    private readonly isInDebugMode: boolean;
 
     constructor(debugMode = false) {
         super(MAIN_SCENE);
         this.isInDebugMode = debugMode
-        if (this.isInDebugMode) console.log("DEBUG")
     }
 
     preload() {
@@ -38,6 +36,7 @@ export default class MainScene extends Phaser.Scene {
     }
 
     create() {
+        if (this.isInDebugMode) console.log("Debugging")
         this.cameras.main.setZoom(0.5);
         this.spider = new Spider(this)
         this.cameras.main.centerOn(this.spider.x, this.spider.y);
@@ -48,9 +47,7 @@ export default class MainScene extends Phaser.Scene {
         this.backgroundSound.play({loop: true})
         const notificationSound = this.sound.add(assets.sounds.notification.key) as Phaser.Sound.WebAudioSound
 
-        this.interactableElements = [
-            new Interactable(this, new Phaser.Math.Vector2(1300, -200), 50.0)
-        ]
+        new Interactable(this, new Phaser.Math.Vector2(1300, -200), 50.0)
 
         eventEmitter.on(GameEvent.SCREEN1_UPDATE, () => notificationSound.play({ loop: false }))
 
@@ -134,7 +131,6 @@ export default class MainScene extends Phaser.Scene {
 
     update(time: number, _delta: number) {
         this.spider.update(time, _delta)
-        this.interactableElements.forEach(element => element.update())
         this.textPath.forEach(ch => ch.setRotation(ch.rotation + (Math.random() > 0.5 ? .01 : -.01)))
 
         const distanceBetweenSpiderAndFoodImage = this.limeImage.getCenter().distance({x: this.spider.x, y: this.spider.y})

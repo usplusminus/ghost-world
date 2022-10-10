@@ -17,6 +17,7 @@ export default {
         food: asset("assets/images/food.png"),
         lemon: asset("assets/images/lemon.png"),
         lime: asset("assets/images/lime.png"),
+        star: asset("assets/images/star.png"),
         chairs: [
             asset("assets/images/chair1.png"),
             asset("assets/images/chair2.png"),

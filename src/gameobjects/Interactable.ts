@@ -1,7 +1,7 @@
 import Phaser from "phaser";
-import {HexColor} from "../colors";
 import {eventEmitter, GameEvent, SceneTrigger, sendTextToScreen1, sendTriggerToScreen2} from "../events";
 import {sampleList} from "../math";
+import assets from "../assets";
 
 const texts = [
     "I've always wanted to start a choir with my friends",
@@ -11,7 +11,6 @@ const texts = [
 ]
 
 export default class Interactable extends Phaser.GameObjects.Graphics {
-    private readonly graphics: Phaser.GameObjects.Graphics;
     private readonly position: Phaser.Math.Vector2;
     private readonly radius: number;
     private lastInteraction: number;
@@ -25,11 +24,7 @@ export default class Interactable extends Phaser.GameObjects.Graphics {
         super(scene);
         this.position = position
         this.radius = radius
-        this.graphics = this.scene.add.graphics({
-            fillStyle: {color: HexColor.white},
-            lineStyle: {width: 0.5, color: HexColor.white, alpha: 1.0}
-        })
-        this.graphics.fillCircle(this.position.x, this.position.y, this.radius)
+        this.scene.add.image(this.position.x, this.position.y, assets.images.star.key).setScale(0.2, 0.2)
         const requiredIntervalMs = 500
         this.lastInteraction = Date.now() - requiredIntervalMs
 

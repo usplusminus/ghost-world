@@ -27,6 +27,7 @@ export default class MainScene extends Phaser.Scene {
         this.load.image(assets.images.food.key, assets.images.food.filepath);
         this.load.image(assets.images.lemon.key, assets.images.lemon.filepath);
         this.load.image(assets.images.lime.key, assets.images.lime.filepath);
+        this.load.image(assets.images.star.key, assets.images.star.filepath);
         this.load.audio(assets.sounds.background.key, assets.sounds.background.filepath);
         this.load.audio(assets.sounds.notification.key, assets.sounds.notification.filepath);
     }

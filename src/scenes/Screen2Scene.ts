@@ -35,6 +35,11 @@ export default class Screen2Scene extends Phaser.Scene {
             new Phaser.Math.Vector2(innerWidth / 2, innerHeight / 2),
         ]
         this.dinnerImages = null;
+        this.initGameStateListener()
+    }
+
+    initGameStateListener(){
+        localStorage.removeItem(screen2StorageKey)
         addEventListener(LOCAL_STORAGE_EVENT, (storageEvent: StorageEvent) => {
             if (storageEvent.key !== screen2StorageKey) return
             if (storageEvent.newValue == null) return

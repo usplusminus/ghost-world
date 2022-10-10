@@ -43,7 +43,11 @@ export default class Screen1Scene extends Phaser.Scene {
             }
         )
         this.notificationSound = this.sound.add(assets.sounds.notification.key) as Phaser.Sound.WebAudioSound
+        this.initGameStateListener()
+    }
 
+    initGameStateListener(){
+        localStorage.removeItem(screen1StorageKey)
         addEventListener(LOCAL_STORAGE_EVENT, (storageEvent: StorageEvent) => {
             if (storageEvent.key !== screen1StorageKey) return
             if (storageEvent.newValue){

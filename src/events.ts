@@ -19,7 +19,7 @@ export const sendTextToScreen1 = (text: string) => {
     localStorage.setItem(screen1StorageKey, text)
     eventEmitter.emit(GameEvent.SCREEN1_UPDATE)
 }
-export const screen2StorageKey = "screen1"
+export const screen2StorageKey = "screen2"
 export const sendTriggerToScreen2 = (trigger: SceneTrigger) => {
     localStorage.setItem(screen2StorageKey, trigger)
     eventEmitter.emit(GameEvent.SCREEN2_UPDATE)

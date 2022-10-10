@@ -3,7 +3,7 @@ import assets from "../assets";
 import {Spider} from "../gameobjects/Spider";
 import {HexColor, semanticColors} from "../colors";
 import Interactable from "../gameobjects/Interactable";
-import {eventEmitter, GameEvent} from "../events";
+import {eventEmitter, GameEvent, SceneTrigger} from "../events";
 import {getGameHeight, getGameWidth} from "../config";
 
 export const MAIN_SCENE = "MainScene"
@@ -56,7 +56,9 @@ export default class MainScene extends Phaser.Scene {
         this.backgroundSound.play({loop: true})
         const notificationSound = this.sound.add(assets.sounds.notification.key) as Phaser.Sound.WebAudioSound
 
-        new Interactable(this, new Phaser.Math.Vector2(1300, -200), 50.0)
+        new Interactable(this, new Phaser.Math.Vector2(900, -200), SceneTrigger.DINNER)
+        new Interactable(this, new Phaser.Math.Vector2(1300, -200), SceneTrigger.CHOIR)
+        new Interactable(this, new Phaser.Math.Vector2(700, -200), SceneTrigger.STUDENT)
 
         eventEmitter.on(GameEvent.SCREEN1_UPDATE, () => notificationSound.play({ loop: false }))
 

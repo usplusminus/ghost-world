@@ -23,6 +23,9 @@ export const gameConfig = (canvasElement: HTMLCanvasElement): Phaser.Types.Core.
                 debug: false
             }
         },
+        // audio: {
+        //     noAudio: true
+        // }
         // fps: {
         //     forceSetTimeOut: true,
         //     // panicMax: 0,

@@ -10,13 +10,15 @@ export enum GameEvent {
     SPIDER_POSITION_UPDATED = "spider-position-updated",
 }
 export enum SceneTrigger {
-    DINNER_SCENE = "dinner-scene"
+    DINNER = "dinner",
+    CHOIR = "choir",
+    STUDENT = "student"
 }
 
 
 export const screen1StorageKey = "screen1"
-export const sendTextToScreen1 = (text: string) => {
-    localStorage.setItem(screen1StorageKey, text)
+export const sendTriggerToScreen1 = (trigger: SceneTrigger) => {
+    localStorage.setItem(screen1StorageKey, trigger)
     eventEmitter.emit(GameEvent.SCREEN1_UPDATE)
 }
 export const screen2StorageKey = "screen2"

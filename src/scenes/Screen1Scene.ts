@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
-import {LOCAL_STORAGE_EVENT, screen1StorageKey} from "../events";
+import {LOCAL_STORAGE_EVENT, SceneTrigger, screen1StorageKey} from "../events";
 import assets from "../assets";
+import {triggerToText} from "../texts";
 
 export const SCREEN1_SCENE = "Screen1Scene"
 
@@ -20,8 +21,8 @@ export default class Screen1Scene extends Phaser.Scene {
     create() {
         this.cameras.main.setZoom(0.5);
         this.cameras.main.centerOn(0, 0);
-        if (this.isInDebugMode){
-            this.add.text(- innerWidth + 100, - innerHeight + 100, "Screen 1", {
+        if (this.isInDebugMode) {
+            this.add.text(-innerWidth + 100, -innerHeight + 100, "Screen 1", {
                 fontSize: "128px",
                 fontFamily: "Times New Roman"
             })
@@ -43,12 +44,12 @@ export default class Screen1Scene extends Phaser.Scene {
         this.initGameStateListener()
     }
 
-    initGameStateListener(){
+    initGameStateListener() {
         localStorage.removeItem(screen1StorageKey)
         addEventListener(LOCAL_STORAGE_EVENT, (storageEvent: StorageEvent) => {
             if (storageEvent.key !== screen1StorageKey) return
-            if (storageEvent.newValue){
-                this.text.setText(storageEvent.newValue)
+            if (storageEvent.newValue && Object.values(SceneTrigger).map(v => v.toString()).includes(storageEvent.newValue)) {
+                this.text.setText(triggerToText(storageEvent.newValue as SceneTrigger))
             }
             localStorage.removeItem(storageEvent.key)
         })

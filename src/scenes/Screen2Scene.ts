@@ -43,7 +43,7 @@ export default class Screen2Scene extends Phaser.Scene {
         addEventListener(LOCAL_STORAGE_EVENT, (storageEvent: StorageEvent) => {
             if (storageEvent.key !== screen2StorageKey) return
             if (storageEvent.newValue == null) return
-            if (storageEvent.newValue === SceneTrigger.DINNER_SCENE)
+            if (storageEvent.newValue === SceneTrigger.DINNER)
                 this.updateDinnerScene()
             localStorage.removeItem(storageEvent.key)
         })

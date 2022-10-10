@@ -1,14 +1,7 @@
 import Phaser from "phaser";
-import {eventEmitter, GameEvent, SceneTrigger, sendTextToScreen1, sendTriggerToScreen2} from "../events";
+import {eventEmitter, GameEvent, SceneTrigger, sendTriggerToScreen1, sendTriggerToScreen2} from "../events";
 import {sampleList} from "../math";
 import assets from "../assets";
-
-const texts = [
-    "I've always wanted to start a choir with my friends",
-    "ABC",
-    "CDF",
-    "JHKJHKJ"
-]
 
 export default class Interactable extends Phaser.GameObjects.Graphics {
     private readonly position: Phaser.Math.Vector2;
@@ -42,7 +35,9 @@ export default class Interactable extends Phaser.GameObjects.Graphics {
     broadcastInteraction() {
         this.lastInteraction = Date.now()
         this.spiderHasBeenOutsideOfRadiusSinceLastInteraction = false
-        sendTextToScreen1(sampleList(texts))
-        sendTriggerToScreen2(SceneTrigger.DINNER_SCENE)
+        sendTriggerToScreen1(sampleList([
+            SceneTrigger.STUDENT, SceneTrigger.CHOIR, SceneTrigger.DINNER
+        ]))
+        sendTriggerToScreen2(SceneTrigger.DINNER)
     }
 }

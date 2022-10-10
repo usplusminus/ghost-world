@@ -46,7 +46,6 @@ export default class MainScene extends Phaser.Scene {
             })
             graphics.strokeRectShape(sceneFrame)
         }
-        this.cameras.main.setZoom(0.5);
         this.spider = new Spider(this)
         this.cameras.main.centerOn(this.spider.x, this.spider.y);
         const lerpingFactor = 0.2

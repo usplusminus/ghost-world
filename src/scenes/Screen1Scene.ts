@@ -19,7 +19,6 @@ export default class Screen1Scene extends Phaser.Scene {
     }
 
     create() {
-        this.cameras.main.setZoom(0.5);
         this.cameras.main.centerOn(0, 0);
         if (this.isInDebugMode) {
             this.add.text(-innerWidth + 100, -innerHeight + 100, "Screen 1", {

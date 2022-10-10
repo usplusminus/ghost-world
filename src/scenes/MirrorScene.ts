@@ -17,7 +17,6 @@ export default class MirrorScene extends Phaser.Scene {
     }
 
     create() {
-        this.cameras.main.setZoom(0.5);
         this.primarySpider = new Spider(this)
         this.mirroredSpider = new Spider(this)
         this.cameras.main.centerOn(this.primarySpider.x, this.primarySpider.y);

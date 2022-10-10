@@ -5,6 +5,15 @@ import {semanticColors} from "./colors";
 export const getGameWidth = () => innerWidth * 2
 export const getGameHeight = () => innerHeight * 2
 
+export const gameConfigWithoutAudio = (canvasElement: HTMLCanvasElement): Phaser.Types.Core.GameConfig => {
+    return {
+        ...gameConfig(canvasElement),
+        audio: {
+            noAudio: true,
+        }
+    }
+}
+
 export const gameConfig = (canvasElement: HTMLCanvasElement): Phaser.Types.Core.GameConfig => {
     return {
         type: Phaser.CANVAS,
@@ -23,9 +32,6 @@ export const gameConfig = (canvasElement: HTMLCanvasElement): Phaser.Types.Core.
                 debug: false
             }
         },
-        // audio: {
-        //     noAudio: true
-        // }
         // fps: {
         //     forceSetTimeOut: true,
         //     // panicMax: 0,

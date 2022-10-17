@@ -30,6 +30,9 @@ export default class MainScene extends Phaser.Scene {
         this.load.image(assets.images.star.key, assets.images.star.filepath);
         this.load.audio(assets.sounds.background.key, assets.sounds.background.filepath);
         this.load.audio(assets.sounds.notification.key, assets.sounds.notification.filepath);
+        assets.images.ghosts.map(ghostAsset =>
+            this.load.image(ghostAsset.key, ghostAsset.filepath
+        ))
     }
 
     create() {
@@ -55,9 +58,9 @@ export default class MainScene extends Phaser.Scene {
         this.backgroundSound.play({loop: true})
         const notificationSound = this.sound.add(assets.sounds.notification.key) as Phaser.Sound.WebAudioSound
 
-        new Interactable(this, new Phaser.Math.Vector2(900, -200), SceneTrigger.DINNER)
-        new Interactable(this, new Phaser.Math.Vector2(1300, -200), SceneTrigger.CHOIR)
-        new Interactable(this, new Phaser.Math.Vector2(700, -200), SceneTrigger.STUDENT)
+        new Interactable(this, new Phaser.Math.Vector2(900, 0), SceneTrigger.DINNER, assets.images.ghosts[0])
+        new Interactable(this, new Phaser.Math.Vector2(1300, 200), SceneTrigger.CHOIR, assets.images.ghosts[1])
+        new Interactable(this, new Phaser.Math.Vector2(700, -500), SceneTrigger.STUDENT, assets.images.ghosts[2])
 
         eventEmitter.on(GameEvent.SCREEN1_UPDATE, () => notificationSound.play({ loop: false }))
 

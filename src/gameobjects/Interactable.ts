@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import {eventEmitter, GameEvent, SceneTrigger, sendTriggerToScreen1, sendTriggerToScreen2} from "../events";
-import assets from "../assets";
+import {Asset} from "../assets";
 
 export default class Interactable extends Phaser.GameObjects.Graphics {
     private readonly position: Phaser.Math.Vector2;
@@ -12,13 +12,14 @@ export default class Interactable extends Phaser.GameObjects.Graphics {
     constructor(
         scene: Phaser.Scene,
         position: Phaser.Math.Vector2,
-        trigger: SceneTrigger
+        trigger: SceneTrigger,
+        asset: Asset
     ) {
         super(scene);
         this.position = position
         this.radius = 50.0
         this.trigger = trigger
-        this.scene.add.image(this.position.x, this.position.y, assets.images.star.key).setScale(0.2, 0.2)
+        this.scene.add.image(this.position.x, this.position.y, asset.key).setScale(2, 2)
         const requiredIntervalMs = 500
         this.lastInteraction = Date.now() - requiredIntervalMs
 
@@ -37,6 +38,6 @@ export default class Interactable extends Phaser.GameObjects.Graphics {
         this.lastInteraction = Date.now()
         this.spiderHasBeenOutsideOfRadiusSinceLastInteraction = false
         sendTriggerToScreen1(this.trigger)
-        sendTriggerToScreen2(SceneTrigger.DINNER)
+        sendTriggerToScreen2(this.trigger)
     }
 }

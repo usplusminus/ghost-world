@@ -1,4 +1,4 @@
-type Asset = {
+export type Asset = {
     key: string,
     filepath: string
 }
@@ -18,11 +18,17 @@ export default {
         lemon: asset("assets/images/lemon.png"),
         lime: asset("assets/images/lime.png"),
         star: asset("assets/images/star.png"),
+        choir: asset("assets/images/choir_dall-e.png"),
         chairs: [
             asset("assets/images/chair1.png"),
             asset("assets/images/chair2.png"),
             asset("assets/images/chair3.png"),
             asset("assets/images/chair4.png"),
+        ],
+        ghosts: [
+            asset("assets/images/ghost1.png"),
+            asset("assets/images/ghost2.png"),
+            asset("assets/images/ghost3.png"),
         ]
     }
 }

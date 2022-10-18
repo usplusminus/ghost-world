@@ -2,7 +2,6 @@ import Phaser from 'phaser';
 import {LOCAL_STORAGE_EVENT, SceneTrigger, screen2StorageKey} from "../events";
 import assets from "../assets";
 import {sampleList} from "../math";
-import destroy = Phaser.Loader.FileTypesManager.destroy;
 
 export const SCREEN2_SCENE = "Screen1Scene"
 
